@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>הסל החכם · השוואת סל פירות וירקות</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ===== Top App Bar ===== -->
+  <header class="appbar">
+    <div class="container appbar__inner">
+      <div class="brand">
+        <img src="./css/sal.png" alt="לוגו הסל החכם" class="brand__logo">
+        <div class="brand__text">
+          <span class="brand__title">הסל החכם</span>
+          <span class="brand__sub">פירות וירקות · השוואה חכמה בין חנויות</span>
+        </div>
+      </div>
+
+      <nav class="topnav" aria-label="תפריט ראשי">
+        <button class="navlink is-active" data-screen="basket" type="button">בניית סל</button>
+        <button class="navlink" data-screen="results" type="button">תוצאות</button>
+        <button class="navlink" data-screen="about" type="button">איך זה עובד</button>
+        <button class="navlink" data-screen="saved" type="button">הסלים שלי</button>
+        <button class="navlink" data-screen="auth-login" type="button">התחברות</button>
+      </nav>
+
+      <button class="cartbtn" data-screen="basket" type="button" aria-label="מעבר לבניית סל">
+        <span class="cartbtn__icon">🛒</span>
+        <span>סל</span>
+        <span id="navCartCount" class="cartbtn__count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== Hero strip (decorative) ===== -->
+  <div class="hero">
+    <div class="container hero__inner">
+      <h1 class="hero__title">השוואה חכמה של סל ירקות ופירות</h1>
+      <p class="hero__sub">בנה סל, בחר העדפה וקבל המלצה על החנות המתאימה לך — לפי מחיר, איכות וכיסוי סל.</p>
+    </div>
+  </div>
+
+  <main class="container container--wide">
+
+    <!-- ===== Screen A: Basket ===== -->
+    <section id="screen-basket" class="screen">
+      <div class="screen__header">
+        <h2>שלב 1 · בניית סל</h2>
+        <p class="muted">חפש מוצר, בחר כמות והוסף לסל שלך.</p>
+      </div>
+
+      <div class="layout-split">
+        <!-- Left: product picker + AI helper -->
+        <div class="basket-side-stack">
+        <div class="card card--pad">
+          <h3 class="card__title">בחירת מוצר</h3>
+
+          <div class="grid grid--2">
+            <div class="field">
+              <label for="productSearch">חיפוש מוצר</label>
+              <input id="productSearch" type="text" placeholder="למשל: עגבניות, בננה, חסה" />
+            </div>
+            <div class="field">
+              <label for="categorySelect">קטגוריה</label>
+              <select id="categorySelect">
+                <option value="הכל">הכל</option>
+                <option value="ירקות">ירקות</option>
+                <option value="פירות">פירות</option>
+                <option value="ירק">ירק</option>
+                <option value="מיוחדים">מיוחדים</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid--3">
+            <div class="field">
+              <label for="productSelect">מוצר</label>
+              <select id="productSelect"></select>
+            </div>
+            <div class="field">
+              <label for="qtyInput">כמות</label>
+              <input id="qtyInput" type="number" min="0.1" step="0.1" value="1" />
+              <small class="hint">ק״ג או יחידה לפי המוצר</small>
+            </div>
+            <div class="field field--action">
+              <label>&nbsp;</label>
+              <button id="addBtn" class="btn primary btn--block">+ הוסף לסל</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card--pad ai-card" aria-labelledby="aiHelperTitle">
+          <div class="ai-card__head">
+            <div>
+              <span class="ai-card__eyebrow">עוזר הסל החכם</span>
+              <h3 id="aiHelperTitle" class="card__title">רוצה שאציע לך סל?</h3>
+            </div>
+            <span class="ai-card__spark">✨</span>
+          </div>
+          <p class="muted ai-card__text">כתוב רעיון כמו “סל לסלט”, “פירות לילדים” או “סל זול לשבוע”, ואני אציע מוצרים מתוך הרשימה שלך.</p>
+          <div class="ai-card__inputRow">
+            <input id="aiQuery" type="text" placeholder="למשל: אני רוצה סל לסלט" />
+            <button id="aiSuggestBtn" class="btn primary" type="button">הצע מוצרים</button>
+          </div>
+          <div class="ai-card__chips" aria-label="רעיונות מהירים">
+            <button class="ai-chip" type="button" data-ai-prompt="סל לסלט ישראלי">סלט ישראלי</button>
+            <button class="ai-chip" type="button" data-ai-prompt="פירות לילדים">פירות לילדים</button>
+            <button class="ai-chip" type="button" data-ai-prompt="סל ירקות בסיסי לשבוע">ירקות לשבוע</button>
+            <button class="ai-chip" type="button" data-ai-prompt="סל למרק ירקות">מרק ירקות</button>
+          </div>
+          <div id="aiSuggestions" class="ai-suggestions" aria-live="polite"></div>
+          <small id="aiStatus" class="hint"></small>
+        </div>
+        </div>
+
+        <!-- Right: basket -->
+        <div class="card card--pad">
+          <div class="card__head-row">
+            <h3 class="card__title">הסל שלך</h3>
+            <span id="basketCounter" class="chip">0 פריטים</span>
+          </div>
+
+          <div id="basketEmpty" class="empty empty--cart">
+            <img src="./css/empty-cart.svg" alt="עגלה ריקה" class="empty__image" />
+            <p>הסל ריק. הוסף מוצרים כדי להמשיך להשוואה.</p>
+          </div>
+
+          <div class="tableWrap">
+            <table id="basketTable" class="table table--clean" aria-label="טבלת סל">
+              <thead>
+                <tr>
+                  <th>מוצר</th>
+                  <th>כמות</th>
+                  <th>יחידה</th>
+                  <th>פעולות</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="actions actions--end">
+            <button id="toPrefsBtn" class="btn primary" disabled>המשך להשוואה ←</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Screen B: Preferences ===== -->
+    <section id="screen-prefs" class="screen hidden">
+      <div class="screen__header">
+        <h2>שלב 2 · העדפות</h2>
+        <p class="muted">בחר עיר וסוג ההמלצה שמתאימה לך.</p>
+      </div>
+
+      <div class="card card--pad card--narrow">
+        <div class="field">
+          <label for="cityInput">ישוב / עיר</label>
+          <input id="cityInput" type="text" placeholder="למשל: תל אביב, חיפה" />
+          <small class="hint">נשתמש בזה כדי לסנן חנויות שמשלחות לאזור שלך.</small>
+        </div>
+
+        <div class="field">
+          <label>סוג המלצה</label>
+          <div class="radioGroup">
+            <label class="radio-card">
+              <input type="radio" name="mode" value="cheapest" checked />
+              <div>
+                <b>הכי זול</b>
+                <span class="muted">המחיר הכולל הנמוך ביותר</span>
+              </div>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="mode" value="bestValue" />
+              <div>
+                <b>הכי משתלם</b>
+                <span class="muted">מחיר + איכות + כיסוי סל</span>
+              </div>
+            </label>
+          </div>
+          <small class="hint">איכות מדורגת: פרימיום / מובחר / מוזל.</small>
+        </div>
+
+        <div class="actions actions--between">
+          <button id="backToBasketBtn" class="btn ghost">→ חזרה לעריכת סל</button>
+          <button id="calcBtn" class="btn primary">חשב תוצאות ←</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Screen C: Results ===== -->
+    <section id="screen-results" class="screen hidden">
+      <div class="screen__header">
+        <h2>שלב 3 · תוצאות השוואה</h2>
+        <p class="muted">סקירה השוואתית של כל חנות לפי הסל וההעדפות שלך.</p>
+      </div>
+
+      <!-- Top summary / recommendation card -->
+      <div id="resultsSummary" class="summary-card"></div>
+
+      <!-- Store cards grid -->
+      <div id="storeCards" class="store-grid"></div>
+
+      <!-- Optional compact table below -->
+      <details class="details details--card">
+        <summary>הצג טבלה מפורטת</summary>
+        <div class="tableWrap">
+          <table id="resultsTable" class="table table--clean" aria-label="טבלת תוצאות">
+            <thead>
+              <tr>
+                <th>חנות</th>
+                <th>איכות</th>
+                <th>כיסוי סל</th>
+                <th>מחיר פריטים</th>
+                <th>משלוח</th>
+                <th>מינימום</th>
+                <th>סה״כ</th>
+                <th>סטטוס</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="actions actions--between">
+        <button id="backToPrefsBtn" class="btn ghost">→ חזרה להעדפות</button>
+        <button id="backToBasketBtn2" class="btn">חזרה לעריכת סל</button>
+      </div>
+    </section>
+
+    <!-- ===== Screen D: About ===== -->
+    <section id="screen-about" class="screen hidden">
+      <div class="screen__header">
+        <h2>איך זה עובד</h2>
+        <p class="muted">מערכת תומכת החלטה להשוואת סל פירות וירקות.</p>
+      </div>
+
+      <div class="layout-split">
+        <div class="card card--pad">
+          <h3 class="card__title">מה המערכת בודקת?</h3>
+          <ul class="bullets">
+            <li><b>מחיר סל</b> — לפי המוצרים שהוזנו.</li>
+            <li><b>כיסוי סל</b> — כמה פריטים קיימים בכל חנות.</li>
+            <li><b>מינימום הזמנה</b> — האם הסל עומד בתנאי החנות.</li>
+            <li><b>עלות משלוח</b> — נלקחת בחשבון בעמידה במינימום.</li>
+            <li><b>איכות</b> — משולבת במצב "הכי משתלם".</li>
+          </ul>
+        </div>
+        <div class="card card--pad">
+          <h3 class="card__title">שיטת החישוב</h3>
+          <ul class="bullets">
+            <li><b>הכי זול</b> — המחיר הכולל הנמוך ביותר.</li>
+            <li><b>הכי משתלם</b> — שילוב כיסוי (50%) + איכות (30%) + מחיר (20%).</li>
+            <li><b>חנות אחת</b> — עדיפות לכיסוי מלא ולמחיר טוב.</li>
+          </ul>
+          <div class="note">
+            <p><b>שים לב:</b> זוהי מערכת תומכת החלטה — אין כאן רכישה בפועל.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" id="aboutBackBtn" type="button">→ חזרה לבניית סל</button>
+      </div>
+    </section>
+
+    <!-- ===== Screen E: Saved ===== -->
+    <section id="screen-saved" class="screen hidden">
+      <div class="screen__header">
+        <h2>הסלים שלי</h2>
+        <p class="muted">שמור ושחזר את הסל הנוכחי בכל זמן.</p>
+      </div>
+
+      <div class="card card--pad card--narrow">
+        <div class="actions">
+          <button class="btn primary" id="saveBasketBtn" type="button">💾 שמור סל נוכחי</button>
+          <button class="btn" id="loadBasketBtn" type="button">📂 טען סל שמור</button>
+          <button class="btn danger" id="clearSavedBtn" type="button">🗑️ מחק סל שמור</button>
+        </div>
+        <p id="savedStatus" class="muted" style="margin-top:12px;"></p>
+        <div class="actions" style="margin-top:16px;">
+          <button class="btn ghost" id="savedBackBtn" type="button">→ חזרה לבניית סל</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Screen Auth (register/profile) ===== -->
+    <section id="screen-auth" class="screen hidden">
+      <div class="screen__header">
+        <h2 id="authTitle">הרשמה</h2>
+        <p class="muted">הפרטים נשמרים מקומית בדפדפן בלבד.</p>
+      </div>
+
+      <div class="card card--pad card--narrow">
+        <div class="grid grid--2">
+          <div class="field">
+            <label for="authEmail">אימייל</label>
+            <input id="authEmail" type="email" placeholder="name@example.com" />
+          </div>
+          <div class="field">
+            <label for="authPassword">סיסמה</label>
+            <input id="authPassword" type="password" placeholder="בחר סיסמה" />
+          </div>
+          <div class="field">
+            <label for="authPhone">טלפון</label>
+            <input id="authPhone" type="tel" placeholder="050-0000000" />
+          </div>
+          <div class="field">
+            <label for="authName">שם מלא</label>
+            <input id="authName" type="text" placeholder="ישראל ישראלי" />
+          </div>
+          <div class="field">
+            <label for="authCity">עיר / ישוב</label>
+            <input id="authCity" type="text" placeholder="למשל: תל אביב" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="authSaveBtn" class="btn primary" type="button">שמור והתחבר</button>
+          <button id="authLogoutBtn" class="btn danger" type="button">התנתק</button>
+          <button id="authBackBtn" class="btn ghost" type="button">חזרה</button>
+        </div>
+        <p id="authStatus" class="muted" style="margin-top:12px;"></p>
+      </div>
+    </section>
+
+    <!-- ===== Screen Auth Login ===== -->
+    <section id="screen-auth-login" class="screen hidden">
+      <div class="screen__header">
+        <h2>התחברות</h2>
+        <p class="muted">היכנס כדי לטעון את הפרטים שלך.</p>
+      </div>
+
+      <div class="card card--pad card--narrow auth-box">
+        <div class="field">
+          <label for="loginEmail">אימייל</label>
+          <input id="loginEmail" type="email" placeholder="name@example.com" />
+        </div>
+        <div class="field">
+          <label for="loginPassword">סיסמה</label>
+          <input id="loginPassword" type="password" placeholder="הזן סיסמה" />
+        </div>
+        <label class="rememberRow">
+          <input id="rememberMe" type="checkbox" />
+          זכור אותי
+        </label>
+        <div class="actions">
+          <button id="loginBtn" class="btn primary" type="button">התחברות</button>
+          <button id="goToRegisterBtn" class="btn ghost" type="button">להרשמה</button>
+        </div>
+        <p id="loginStatus" class="muted"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container muted">© פורטל השוואת סל · פרויקט גמר אקדמי</div>
+  </footer>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
