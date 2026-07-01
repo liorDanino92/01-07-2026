@@ -1368,10 +1368,6 @@ body.is-results-screen::before {
   filter: saturate(1.12) contrast(1.06);
 }
 
-body.is-results-screen::after {
-  display: none !important;
-}
-
 .appbar,
 .hero,
 main.container {
