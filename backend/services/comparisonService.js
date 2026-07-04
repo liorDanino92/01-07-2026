@@ -44,7 +44,14 @@ function calculateComparisons(basketItems, stores) {
 }
 
 function pickRecommendation(results, mode) {
-  const list = results.slice();
+  const list = results.filter(r => r.coverageFound > 0);
+
+  if (!list.length) {
+    return {
+      type: "none",
+      reason: "לא נמצאו חנויות שמחזיקות מוצרים מתוך הסל."
+    };
+  }
 
   if (mode === "bestValue") {
     const minPrice = Math.min(...list.map(r => r.totalWithDelivery ?? r.subtotal));
@@ -66,16 +73,30 @@ function pickRecommendation(results, mode) {
     });
 
     scored.sort((a, b) => b.score - a.score);
-    return { type: "store", storeId: scored[0].storeId, label: "הכי משתלם" };
+
+    return {
+      type: "store",
+      storeId: scored[0].storeId,
+      label: "הכי משתלם"
+    };
   }
 
   list.sort((a, b) => {
+    if (a.coverageRatio !== b.coverageRatio) {
+      return b.coverageRatio - a.coverageRatio;
+    }
+
     const aPrice = a.totalWithDelivery ?? a.subtotal;
     const bPrice = b.totalWithDelivery ?? b.subtotal;
+
     return aPrice - bPrice;
   });
 
-  return { type: "store", storeId: list[0].storeId, label: "הכי זול" };
+  return {
+    type: "store",
+    storeId: list[0].storeId,
+    label: "הכי זול"
+  };
 }
 
 module.exports = {
