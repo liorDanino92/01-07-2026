@@ -49,12 +49,15 @@ body {
 }
 
 /* רקע עדין נושא ירקות/פירות — גרדיאנט + צורות רכות */
+/* רקע תמונת pattern לכל האתר */
 body {
-  background:
-    radial-gradient(900px 500px at 90% -100px, rgba(47, 156, 74, .10), transparent 60%),
-    radial-gradient(700px 400px at 0% 10%, rgba(245, 124, 32, .07), transparent 60%),
-    radial-gradient(600px 400px at 50% 110%, rgba(47, 156, 74, .08), transparent 60%),
-    var(--bg);
+  background-color: #f7f5e8;
+  background-image: url("./2.png");
+  background-repeat: repeat;
+  background-position: top left;
+
+  /* חשוב: לא cover ולא 100% */
+  background-size: 360px 360px;
 }
 
 .container {
@@ -186,12 +189,12 @@ body {
 }
 
 .hero__inner {
-  padding: 28px 24px 26px;
+  padding: 14px 24px 12px;
 }
 
 .hero__title {
-  margin: 0 0 6px;
-  font-size: clamp(22px, 2.4vw, 30px);
+  margin: 0 0 4px;
+  font-size: clamp(18px, 1.8vw, 24px);
   font-weight: 800;
   color: var(--green-700);
 }
@@ -200,12 +203,13 @@ body {
   margin: 0;
   color: var(--muted);
   max-width: 720px;
+  font-size: 14px;
 }
 
 /* ===== Screens & headers ===== */
 main.container {
-  padding-top: 28px;
-  padding-bottom: 60px;
+  padding-top: 24px;
+  padding-bottom: 40px;
 }
 
 .screen {
@@ -217,12 +221,12 @@ main.container {
 }
 
 .screen__header {
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .screen__header h2 {
-  margin: 0 0 4px;
-  font-size: 22px;
+  margin: 0 0 3px;
+  font-size: 20px;
   font-weight: 800;
   color: var(--green-700);
 }
@@ -236,7 +240,7 @@ main.container {
 }
 
 .card--pad {
-  padding: 22px;
+  padding: 14px;
 }
 
 .card--narrow {
@@ -1359,7 +1363,7 @@ body.is-results-screen::before {
   z-index: 0;
   pointer-events: none;
 
-  background-image: url("./site-background.png");
+  background-image: url("./2.png");
   background-repeat: repeat-y;
   background-position: top center;
   background-size: 90% auto;
@@ -1815,7 +1819,7 @@ body.is-results-screen {
   background-color: var(--site-peach) !important;
   background-image:
     linear-gradient(180deg, rgba(255, 244, 237, .68), rgba(255, 244, 237, .50)),
-    url("./site-background.png") !important;
+    url("./2.png") !important;
   background-size: 100% auto !important;
   background-position: center top !important;
   background-repeat: repeat-y !important;
@@ -2049,4 +2053,73 @@ body.is-results-screen .details--card {
     background-size: auto 1000px !important;
     background-position: center top !important;
   }
+}
+
+/* ===== Quick products picker ===== */
+.quick-add {
+  margin-top: 16px;
+}
+
+.quick-add__head {
+  margin-bottom: 10px;
+}
+
+.quick-products {
+  display: grid;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-inline-end: 4px;
+}
+
+.quick-product {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+  transition: border-color .15s, background .15s, transform .15s;
+}
+
+.quick-product:hover {
+  border-color: var(--green-300);
+  background: white;
+  transform: translateY(-1px);
+}
+
+.quick-product__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.quick-product__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quick-product__qty {
+  min-width: 34px;
+  text-align: center;
+  font-weight: 800;
+  color: var(--green-700);
+}
+
+@media (max-width: 520px) {
+  .quick-product {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .quick-product__actions {
+    justify-content: space-between;
+  }
+}
+
+.hero {
+  display: none;
 }

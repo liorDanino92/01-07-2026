@@ -4,75 +4,73 @@ import { calculateComparisons, pickRecommendation } from "./calc.js";
 const el = (id) => document.getElementById(id);
 
 // === מסכים ===
-const screenBasket    = el("screen-basket");
-const screenPrefs     = el("screen-prefs");
-const screenResults   = el("screen-results");
-const screenAbout     = el("screen-about");
-const screenSaved     = el("screen-saved");
-const screenAuth      = el("screen-auth");
+const screenBasket = el("screen-basket");
+const screenPrefs = el("screen-prefs");
+const screenResults = el("screen-results");
+const screenAbout = el("screen-about");
+const screenSaved = el("screen-saved");
+const screenAuth = el("screen-auth");
 const screenAuthLogin = el("screen-auth-login");
 
 // === ניווט ===
-const navLinks      = Array.from(document.querySelectorAll(".navlink"));
-const navCartCount  = el("navCartCount");
+const navLinks = Array.from(document.querySelectorAll(".navlink"));
+const navCartCount = el("navCartCount");
 const basketCounter = el("basketCounter");
 
 // === בחירת מוצרים וסל ===
-const productSelect = el("productSelect");
-const qtyInput      = el("qtyInput");
-const addBtn        = el("addBtn");
 const productSearch = el("productSearch");
-const categorySelect= el("categorySelect");
+const categorySelect = el("categorySelect");
+const quickProductsList = el("quickProductsList");
 
 // === עוזר AI / עוזר סל חכם ===
-const aiQuery       = el("aiQuery");
-const aiSuggestBtn  = el("aiSuggestBtn");
+const aiQuery = el("aiQuery");
+const aiSuggestBtn = el("aiSuggestBtn");
 const aiSuggestions = el("aiSuggestions");
-const aiStatus      = el("aiStatus");
+const aiStatus = el("aiStatus");
 
-const basketTable   = el("basketTable");
-const basketTbody   = basketTable.querySelector("tbody");
-const basketEmpty   = el("basketEmpty");
-const toPrefsBtn    = el("toPrefsBtn");
+const basketTable = el("basketTable");
+const basketTbody = basketTable.querySelector("tbody");
+const basketEmpty = el("basketEmpty");
+const toPrefsBtn = el("toPrefsBtn");
 
 // === ניווט בין מסכים ===
-const backToBasketBtn  = el("backToBasketBtn");
-const calcBtn          = el("calcBtn");
-const backToPrefsBtn   = el("backToPrefsBtn");
+const backToBasketBtn = el("backToBasketBtn");
+const calcBtn = el("calcBtn");
+const backToPrefsBtn = el("backToPrefsBtn");
 const backToBasketBtn2 = el("backToBasketBtn2");
-const aboutBackBtn     = el("aboutBackBtn");
+const aboutBackBtn = el("aboutBackBtn");
 
 // === תוצאות ===
-const resultsTable   = el("resultsTable");
-const resultsTbody   = resultsTable.querySelector("tbody");
+const resultsTable = el("resultsTable");
+const resultsTbody = resultsTable.querySelector("tbody");
 const resultsSummary = el("resultsSummary");
-const storeCards     = el("storeCards");
+const storeCards = el("storeCards");
 
 // === סלים שמורים ===
-const saveBasketBtn  = el("saveBasketBtn");
-const loadBasketBtn  = el("loadBasketBtn");
-const clearSavedBtn  = el("clearSavedBtn");
-const savedBackBtn   = el("savedBackBtn");
-const savedStatus    = el("savedStatus");
+const saveBasketBtn = el("saveBasketBtn");
+const loadBasketBtn = el("loadBasketBtn");
+const clearSavedBtn = el("clearSavedBtn");
+const savedBackBtn = el("savedBackBtn");
+const savedStatus = el("savedStatus");
 
 // === הרשמה/התחברות ===
-const authEmail     = el("authEmail");
-const authPhone     = el("authPhone");
-const authName      = el("authName");
-const authCity      = el("authCity");
-const authPassword  = el("authPassword");
-const authSaveBtn   = el("authSaveBtn");
+const authEmail = el("authEmail");
+const authPhone = el("authPhone");
+const authName = el("authName");
+const authCity = el("authCity");
+const authPassword = el("authPassword");
+const authSaveBtn = el("authSaveBtn");
 const authLogoutBtn = el("authLogoutBtn");
-const authBackBtn   = el("authBackBtn");
-const authStatus    = el("authStatus");
-const authTitle     = el("authTitle");
+const authBackBtn = el("authBackBtn");
+const authStatus = el("authStatus");
+const authTitle = el("authTitle");
 
-const loginEmail        = el("loginEmail");
-const loginPassword     = el("loginPassword");
-const rememberMe        = el("rememberMe");
-const loginBtn          = el("loginBtn");
-const goToRegisterBtn   = el("goToRegisterBtn");
-const loginStatus       = el("loginStatus");
+const loginEmail = el("loginEmail");
+const loginPassword = el("loginPassword");
+const rememberMe = el("rememberMe");
+const loginBtn = el("loginBtn");
+const goToRegisterBtn = el("goToRegisterBtn");
+const loginStatus = el("loginStatus");
 
 // סל בזיכרון: [{ productId, qty }]
 let basket = [];
@@ -86,18 +84,18 @@ function getBasketCount() {
 
 function updateNavCartCount() {
   const n = getBasketCount();
-  if (navCartCount)  navCartCount.textContent = String(n);
+  if (navCartCount) navCartCount.textContent = String(n);
   if (basketCounter) basketCounter.textContent = `${n} פריטים`;
 }
 
 navLinks.forEach(btn => {
   btn.addEventListener("click", () => {
     const key = btn.dataset.screen;
-    if (key === "basket")  return showScreen(screenBasket);
+    if (key === "basket") return showScreen(screenBasket);
     if (key === "results") return showScreen(screenResults);
-    if (key === "about")   return showScreen(screenAbout);
-    if (key === "saved")   return showScreen(screenSaved);
-    if (key === "auth")    return showScreen(screenAuth);
+    if (key === "about") return showScreen(screenAbout);
+    if (key === "saved") return showScreen(screenSaved);
+    if (key === "auth") return showScreen(screenAuth);
     if (key === "auth-login") {
       const user = getUser();
       return showScreen(user ? screenAuth : screenAuthLogin);
@@ -119,12 +117,12 @@ function showScreen(which) {
 
   // עדכון כפתור פעיל בתפריט
   const map = new Map([
-    [screenBasket,    "basket"],
-    [screenResults,   "results"],
-    [screenAbout,     "about"],
-    [screenSaved,     "saved"],
-    [screenAuth,      "auth"],
-    [screenPrefs,     null],
+    [screenBasket, "basket"],
+    [screenResults, "results"],
+    [screenAbout, "about"],
+    [screenSaved, "saved"],
+    [screenAuth, "auth"],
+    [screenPrefs, null],
     [screenAuthLogin, "auth-login"],
   ]);
   const activeKey = map.get(which);
@@ -154,32 +152,51 @@ function getFilteredProducts() {
   });
 }
 
+function getBasketItemQty(productId) {
+  const item = basket.find(x => x.productId === productId);
+  return item ? item.qty : 0;
+}
+
 function renderProductOptions() {
   const filteredProducts = getFilteredProducts();
 
+  if (!quickProductsList) return;
+
+  quickProductsList.innerHTML = "";
+
   if (filteredProducts.length === 0) {
-    productSelect.innerHTML = `<option value="">לא נמצאו מוצרים</option>`;
-    productSelect.disabled = true;
-    addBtn.disabled = true;
+    quickProductsList.innerHTML = `
+      <div class="empty">
+        <div class="empty__icon">🔍</div>
+        <p>לא נמצאו מוצרים מתאימים לחיפוש.</p>
+      </div>
+    `;
     return;
   }
-  productSelect.disabled = false;
-  addBtn.disabled = false;
-  productSelect.innerHTML = filteredProducts
-    .map(p => `<option value="${p.id}">${p.name} (${p.unit})</option>`)
-    .join("");
+
+  for (const product of filteredProducts) {
+    const qty = getBasketItemQty(product.id);
+
+    const row = document.createElement("div");
+    row.className = "quick-product";
+    row.innerHTML = `
+      <div class="quick-product__info">
+        <b>${product.name}</b>
+        <span class="muted">${product.category} · ${product.unit}</span>
+      </div>
+
+      <div class="quick-product__actions">
+        <button class="btn" type="button" data-action="quick-dec" data-id="${product.id}">−</button>
+        <span class="quick-product__qty">${qty > 0 ? qty : 0}</span>
+        <button class="btn primary" type="button" data-action="quick-add" data-id="${product.id}">+</button>
+      </div>
+    `;
+
+    quickProductsList.appendChild(row);
+  }
 }
 
-// התאמת שלבי הכמות לפי יח'/ק"ג
-productSelect.addEventListener("change", () => {
-  const product = PRODUCTS.find(p => p.id === productSelect.value);
-  if (!product) return;
-  if (product.unit === "יח'") {
-    qtyInput.step = 1;  qtyInput.min = 1;   qtyInput.value = 1;
-  } else {
-    qtyInput.step = 0.1; qtyInput.min = 0.1; qtyInput.value = 1;
-  }
-});
+
 
 // =================================================
 // סל: רינדור, הוספה, שינוי כמות, הסרה
@@ -218,12 +235,17 @@ function renderBasket() {
 }
 
 function addToBasket(productId, qty) {
+  const product = PRODUCTS.find(p => p.id === productId);
+  const minQty = product?.unit === "יח'" ? 1 : 0.5;
+
   const existing = basket.find(x => x.productId === productId);
+
   if (existing) {
-    existing.qty = Math.max(0.1, Math.round((existing.qty + qty) * 10) / 10);
+    existing.qty = Math.max(minQty, Math.round((existing.qty + qty) * 10) / 10);
   } else {
     basket.push({ productId, qty });
   }
+
   renderBasket();
 }
 
@@ -247,22 +269,42 @@ basketTbody.addEventListener("click", (e) => {
   const action = btn.dataset.action;
   const productId = btn.dataset.id;
   if (action === "remove") removeItem(productId);
-  if (action === "inc")    adjustItem(productId,  1);
-  if (action === "dec")    adjustItem(productId, -1);
+  if (action === "inc") adjustItem(productId, 1);
+  if (action === "dec") adjustItem(productId, -1);
 });
 
-productSearch?.addEventListener("input",  () => renderProductOptions());
+productSearch?.addEventListener("input", () => renderProductOptions());
 categorySelect?.addEventListener("change", () => { renderProductOptions(); productSearch?.focus(); });
 
-addBtn.addEventListener("click", () => {
-  const productId = productSelect.value;
-  const qty = Number(qtyInput.value);
-  if (!productId || !Number.isFinite(qty) || qty <= 0) return;
-  addToBasket(productId, qty);
-  qtyInput.value = 1;
-  // שומרים את המוצר שנבחר ברשימה, ולא מחזירים לברירת המחדל.
-  productSelect.value = productId;
-  productSelect.focus();
+quickProductsList?.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+
+  const action = btn.dataset.action;
+  const productId = btn.dataset.id;
+  const product = PRODUCTS.find(p => p.id === productId);
+  if (!product) return;
+
+  const step = product.unit === "יח'" ? 1 : 0.5;
+
+  if (action === "quick-add") {
+    addToBasket(productId, step);
+  }
+
+  if (action === "quick-dec") {
+    const item = basket.find(x => x.productId === productId);
+    if (!item) return;
+
+    item.qty = Math.round((item.qty - step) * 10) / 10;
+
+    if (item.qty <= 0) {
+      removeItem(productId);
+    } else {
+      renderBasket();
+    }
+  }
+
+  renderProductOptions();
 });
 
 
@@ -369,10 +411,10 @@ aiSuggestions?.addEventListener("click", (e) => {
 // =================================================
 // ניווט בין שלבים + חישוב תוצאות
 // =================================================
-toPrefsBtn.addEventListener("click",      () => showScreen(screenPrefs));
+toPrefsBtn.addEventListener("click", () => showScreen(screenPrefs));
 backToBasketBtn.addEventListener("click", () => showScreen(screenBasket));
-backToBasketBtn2.addEventListener("click",() => showScreen(screenBasket));
-backToPrefsBtn.addEventListener("click",  () => showScreen(screenPrefs));
+backToBasketBtn2.addEventListener("click", () => showScreen(screenBasket));
+backToPrefsBtn.addEventListener("click", () => showScreen(screenPrefs));
 
 calcBtn.addEventListener("click", () => {
   const mode = document.querySelector('input[name="mode"]:checked')?.value ?? "cheapest";
@@ -395,7 +437,7 @@ calcBtn.addEventListener("click", () => {
 // =================================================
 function qualityBadge(q) {
   if (q === "פרימיום") return `<span class="badge ok">פרימיום</span>`;
-  if (q === "מובחר")   return `<span class="badge warn">מובחר</span>`;
+  if (q === "מובחר") return `<span class="badge warn">מובחר</span>`;
   return `<span class="badge bad">מוזל</span>`;
 }
 
@@ -528,8 +570,8 @@ function renderResults(results, rec, mode) {
 
           <div class="premium-missing ${missingNames.length ? "" : "premium-missing--ok"}">
             ${missingNames.length
-              ? `<b>חסרים:</b> ${missingNames.slice(0, 3).join(", ")}${missingNames.length > 3 ? " ועוד" : ""}`
-              : `✓ כל פריטי הסל קיימים בחנות`}
+          ? `<b>חסרים:</b> ${missingNames.slice(0, 3).join(", ")}${missingNames.length > 3 ? " ועוד" : ""}`
+          : `✓ כל פריטי הסל קיימים בחנות`}
           </div>
         </div>
 
@@ -570,11 +612,11 @@ function renderResults(results, rec, mode) {
 // משתמש: שמירה ב-localStorage (הרשמה/התחברות)
 // =================================================
 const STORAGE_KEY = "basket_v1";
-const USER_KEY    = "user_v1";
+const USER_KEY = "user_v1";
 
 function saveUser(user) { localStorage.setItem(USER_KEY, JSON.stringify(user)); }
-function getUser()      { return JSON.parse(localStorage.getItem(USER_KEY)); }
-function clearUser()    { localStorage.removeItem(USER_KEY); }
+function getUser() { return JSON.parse(localStorage.getItem(USER_KEY)); }
+function clearUser() { localStorage.removeItem(USER_KEY); }
 
 function renderAuthStatus() {
   const user = getUser();
@@ -582,7 +624,7 @@ function renderAuthStatus() {
 
   if (!user) {
     if (authNavBtn) authNavBtn.textContent = "התחברות";
-    if (authTitle)  authTitle.textContent  = "הרשמה";
+    if (authTitle) authTitle.textContent = "הרשמה";
     if (authStatus) authStatus.textContent = "לא מחובר כרגע.";
     authEmail.value = ""; authPhone.value = ""; authName.value = ""; authCity.value = "";
     if (authPassword) authPassword.value = "";
@@ -593,11 +635,11 @@ function renderAuthStatus() {
 
   const firstName = user.name?.trim().split(" ")[0] || "משתמש";
   if (authNavBtn) authNavBtn.textContent = firstName;
-  if (authTitle)  authTitle.textContent  = `אזור אישי · ${firstName}`;
+  if (authTitle) authTitle.textContent = `אזור אישי · ${firstName}`;
   authEmail.value = user.email || "";
   authPhone.value = user.phone || "";
-  authName.value  = user.name  || "";
-  authCity.value  = user.city  || "";
+  authName.value = user.name || "";
+  authCity.value = user.city || "";
   if (authPassword) authPassword.value = user.password || "";
   authSaveBtn.textContent = "שמור שינויים";
   authLogoutBtn.classList.remove("hidden");
@@ -626,8 +668,8 @@ loginBtn?.addEventListener("click", () => {
 authSaveBtn?.addEventListener("click", () => {
   const email = authEmail.value.trim();
   const phone = authPhone.value.trim();
-  const name  = authName.value.trim();
-  const city  = authCity.value.trim();
+  const name = authName.value.trim();
+  const city = authCity.value.trim();
   const password = authPassword.value.trim();
   if (!email || !phone || !name || !city || !password) {
     authStatus.textContent = "יש למלא את כל השדות."; return;
@@ -642,7 +684,7 @@ authLogoutBtn?.addEventListener("click", () => {
   clearUser();
   renderAuthStatus();
   loginStatus.textContent = "";
-  authStatus.textContent  = "התבצעה התנתקות.";
+  authStatus.textContent = "התבצעה התנתקות.";
   showScreen(screenBasket);
 });
 
