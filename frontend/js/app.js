@@ -1,5 +1,4 @@
-import { PRODUCTS, STORES } from "./data.js";
-import { calculateComparisons, pickRecommendation } from "./calc.js";
+import { PRODUCTS } from "./data.js";
 
 const el = (id) => document.getElementById(id);
 
@@ -544,20 +543,44 @@ backToBasketBtn.addEventListener("click", () => showScreen(screenBasket));
 backToBasketBtn2.addEventListener("click", () => showScreen(screenBasket));
 backToPrefsBtn.addEventListener("click", () => showScreen(screenPrefs));
 
-calcBtn.addEventListener("click", () => {
+calcBtn.addEventListener("click", async () => {
   const mode = document.querySelector('input[name="mode"]:checked')?.value ?? "cheapest";
   const cityInput = document.getElementById("cityInput");
   const user = getUser();
   const city = user?.city?.trim() || cityInput?.value.trim() || "";
 
-  let filteredStores = STORES;
-  if (city) filteredStores = STORES.filter(store => store.areas?.includes(city));
+  try {
+    calcBtn.disabled = true;
+    calcBtn.textContent = "מחשב תוצאות...";
 
-  const results = calculateComparisons(basket, filteredStores);
-  const rec = pickRecommendation(results, mode);
+    const response = await fetch("http://localhost:3000/api/compare", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        basket,
+        mode,
+        city
+      })
+    });
 
-  renderResults(results, rec, mode);
-  showScreen(screenResults);
+    if (!response.ok) {
+      throw new Error("שגיאה בקבלת תוצאות מהשרת");
+    }
+
+    const data = await response.json();
+
+    renderResults(data.results, data.recommendation, mode);
+    showScreen(screenResults);
+
+  } catch (error) {
+    console.error(error);
+    alert("אירעה שגיאה בחיבור לשרת. ודא שה-Backend פועל.");
+  } finally {
+    calcBtn.disabled = false;
+    calcBtn.textContent = "חשב תוצאות ←";
+  }
 });
 
 // =================================================
