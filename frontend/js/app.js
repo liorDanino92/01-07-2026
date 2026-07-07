@@ -1,5 +1,4 @@
-import { PRODUCTS, STORES } from "./data.js";
-import { calculateComparisons, pickRecommendation } from "./calc.js";
+import { PRODUCTS } from "./data.js";
 
 const el = (id) => document.getElementById(id);
 
@@ -23,10 +22,15 @@ const categorySelect = el("categorySelect");
 const quickProductsList = el("quickProductsList");
 
 // === עוזר AI / עוזר סל חכם ===
-const aiQuery = el("aiQuery");
+const aiToggleBtn = el("aiToggleBtn");
+const aiPanel = el("aiPanel");
+const aiPromptInput = el("aiPromptInput");
 const aiSuggestBtn = el("aiSuggestBtn");
-const aiSuggestions = el("aiSuggestions");
 const aiStatus = el("aiStatus");
+const aiSuggestionsList = el("aiSuggestionsList");
+const aiAddSelectedBtn = el("aiAddSelectedBtn");
+const aiQuery = null;
+const aiSuggestions = null;
 
 const basketTable = el("basketTable");
 const basketTbody = basketTable.querySelector("tbody");
@@ -74,6 +78,10 @@ const loginStatus = el("loginStatus");
 
 // סל בזיכרון: [{ productId, qty }]
 let basket = [];
+const hebrewCollator = new Intl.Collator("he", {
+  sensitivity: "base",
+  numeric: true,
+});
 
 // =================================================
 // כללי: ניווט בין מסכים + עדכון מונה סל בתפריט
@@ -144,12 +152,16 @@ function getFilteredProducts() {
   const searchText = (productSearch?.value || "").trim().toLowerCase();
   const selectedCategory = categorySelect?.value || "הכל";
 
-  return PRODUCTS.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchText);
+  const filteredProducts = PRODUCTS.filter(product => {
+    const matchesSearch = product.name.toLowerCase().startsWith(searchText);
     const matchesCategory =
       selectedCategory === "הכל" || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  if (!searchText) return filteredProducts;
+
+  return filteredProducts.sort((a, b) => hebrewCollator.compare(a.name, b.name));
 }
 
 function getBasketItemQty(productId) {
@@ -307,6 +319,121 @@ quickProductsList?.addEventListener("click", (e) => {
   renderProductOptions();
 });
 
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function renderServerAiSuggestions(suggestions) {
+  if (!aiSuggestionsList) return;
+
+  aiSuggestionsList.innerHTML = suggestions.map(suggestion => {
+    const product = findProduct(suggestion.productId);
+    const name = suggestion.name || product?.name || suggestion.productId;
+    const unit = suggestion.unit || product?.unit || "";
+    const qty = Number(suggestion.qty) || 1;
+    const reason = suggestion.reason || "";
+
+    return `
+      <label class="ai-suggestion">
+        <input type="checkbox" checked data-product-id="${escapeHtml(suggestion.productId)}" data-qty="${qty}">
+        <span class="ai-suggestion__main">
+          <b>${escapeHtml(name)}</b>
+          <small>${escapeHtml(reason)}</small>
+        </span>
+        <span class="ai-suggestion__qty">${escapeHtml(qty)} ${escapeHtml(unit)}</span>
+      </label>
+    `;
+  }).join("");
+}
+
+async function requestAiBasketSuggestions() {
+  const promptText = (aiPromptInput?.value || "").trim();
+
+  if (!promptText) {
+    if (aiStatus) aiStatus.textContent = "כתוב קודם רעיון לסל.";
+    return;
+  }
+
+  if (aiSuggestBtn) aiSuggestBtn.disabled = true;
+  if (aiStatus) aiStatus.textContent = "מחפש מוצרים מתאימים...";
+  if (aiSuggestionsList) aiSuggestionsList.innerHTML = "";
+
+  try {
+    const response = await fetch("http://localhost:3000/api/ai-basket-suggestions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt: promptText,
+        products: PRODUCTS,
+      }),
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || data.error) {
+      throw new Error(data.error || "לא ניתן לקבל הצעות כרגע.");
+    }
+
+    const suggestions = Array.isArray(data.suggestions) ? data.suggestions : [];
+
+    if (suggestions.length === 0) {
+      if (aiStatus) aiStatus.textContent = "לא נמצאו מוצרים מתאימים מתוך הרשימה.";
+      return;
+    }
+
+    renderServerAiSuggestions(suggestions);
+    if (aiStatus) aiStatus.textContent = "בחר מוצרים מהרשימה והוסף לסל.";
+  } catch (error) {
+    const message = error instanceof TypeError
+      ? "לא ניתן להתחבר לעוזר הסל כרגע. ודא שהשרת פעיל."
+      : error?.message || "לא ניתן להתחבר לעוזר הסל כרגע. ודא שהשרת פעיל.";
+    if (aiStatus) aiStatus.textContent = message;
+  } finally {
+    if (aiSuggestBtn) aiSuggestBtn.disabled = false;
+  }
+}
+
+aiToggleBtn?.addEventListener("click", () => {
+  if (!aiPanel) return;
+  aiPanel.classList.toggle("hidden");
+  if (!aiPanel.classList.contains("hidden")) {
+    aiPromptInput?.focus();
+  }
+});
+
+aiSuggestBtn?.addEventListener("click", requestAiBasketSuggestions);
+
+aiPromptInput?.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    requestAiBasketSuggestions();
+  }
+});
+
+aiAddSelectedBtn?.addEventListener("click", () => {
+  const selected = Array.from(aiSuggestionsList?.querySelectorAll('input[type="checkbox"]:checked') || []);
+
+  if (selected.length === 0) {
+    if (aiStatus) aiStatus.textContent = "בחר לפחות מוצר אחד להוספה.";
+    return;
+  }
+
+  selected.forEach(checkbox => {
+    const productId = checkbox.dataset.productId;
+    const qty = Number(checkbox.dataset.qty) || 1;
+    if (productId) addToBasket(productId, qty);
+  });
+
+  renderBasket();
+  renderProductOptions();
+  if (aiStatus) aiStatus.textContent = "המוצרים נוספו לסל.";
+});
+
 
 // =================================================
 // עוזר הסל החכם — גרסה מקומית בלי API חיצוני
@@ -416,20 +543,44 @@ backToBasketBtn.addEventListener("click", () => showScreen(screenBasket));
 backToBasketBtn2.addEventListener("click", () => showScreen(screenBasket));
 backToPrefsBtn.addEventListener("click", () => showScreen(screenPrefs));
 
-calcBtn.addEventListener("click", () => {
+calcBtn.addEventListener("click", async () => {
   const mode = document.querySelector('input[name="mode"]:checked')?.value ?? "cheapest";
   const cityInput = document.getElementById("cityInput");
   const user = getUser();
   const city = user?.city?.trim() || cityInput?.value.trim() || "";
 
-  let filteredStores = STORES;
-  if (city) filteredStores = STORES.filter(store => store.areas?.includes(city));
+  try {
+    calcBtn.disabled = true;
+    calcBtn.textContent = "מחשב תוצאות...";
 
-  const results = calculateComparisons(basket, filteredStores);
-  const rec = pickRecommendation(results, mode);
+    const response = await fetch("http://localhost:3000/api/compare", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        basket,
+        mode,
+        city
+      })
+    });
 
-  renderResults(results, rec, mode);
-  showScreen(screenResults);
+    if (!response.ok) {
+      throw new Error("שגיאה בקבלת תוצאות מהשרת");
+    }
+
+    const data = await response.json();
+
+    renderResults(data.results, data.recommendation, mode);
+    showScreen(screenResults);
+
+  } catch (error) {
+    console.error(error);
+    alert("אירעה שגיאה בחיבור לשרת. ודא שה-Backend פועל.");
+  } finally {
+    calcBtn.disabled = false;
+    calcBtn.textContent = "חשב תוצאות ←";
+  }
 });
 
 // =================================================

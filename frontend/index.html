@@ -77,6 +77,24 @@
                 </select>
               </div>
             </div>
+            <button id="aiToggleBtn" class="btn ai-toggle-btn" type="button">✨ הצע לי סל</button>
+
+            <div id="aiPanel" class="ai-panel hidden" aria-live="polite">
+              <div class="ai-panel__header">
+                <h4>עוזר סל חכם</h4>
+                <p>כתוב מה אתה רוצה להכין, והמערכת תציע מוצרים מתוך הרשימה באתר.</p>
+              </div>
+
+              <div class="ai-panel__form">
+                <input id="aiPromptInput" type="text" placeholder="למשל: סלט יווני, סלט פירות, פלטת פירות" />
+                <button id="aiSuggestBtn" class="btn primary" type="button">הצע מוצרים</button>
+              </div>
+
+              <div id="aiStatus" class="ai-status"></div>
+              <div id="aiSuggestionsList" class="ai-suggestions"></div>
+              <button id="aiAddSelectedBtn" class="btn primary btn--block" type="button">הוסף נבחרים לסל</button>
+            </div>
+
             <div class="quick-add">
               <div class="quick-add__head">
                 <span class="muted">בחר מוצרים מהרשימה והוסף לסל בלחיצה</span>
@@ -86,7 +104,7 @@
             </div>
           </div>
 
-          <div class="card card--pad ai-card" aria-labelledby="aiHelperTitle">
+          <div class="card card--pad ai-card hidden" aria-labelledby="aiHelperTitle">
             <div class="ai-card__head">
               <div>
                 <span class="ai-card__eyebrow">עוזר הסל החכם</span>
@@ -97,8 +115,8 @@
             <p class="muted ai-card__text">כתוב רעיון כמו “סל לסלט”, “פירות לילדים” או “סל זול לשבוע”, ואני אציע מוצרים
               מתוך הרשימה שלך.</p>
             <div class="ai-card__inputRow">
-              <input id="aiQuery" type="text" placeholder="למשל: אני רוצה סל לסלט" />
-              <button id="aiSuggestBtn" class="btn primary" type="button">הצע מוצרים</button>
+              <input id="legacyAiQuery" type="text" placeholder="למשל: אני רוצה סל לסלט" />
+              <button id="legacyAiSuggestBtn" class="btn primary" type="button">הצע מוצרים</button>
             </div>
             <div class="ai-card__chips" aria-label="רעיונות מהירים">
               <button class="ai-chip" type="button" data-ai-prompt="סל לסלט ישראלי">סלט ישראלי</button>
@@ -106,8 +124,8 @@
               <button class="ai-chip" type="button" data-ai-prompt="סל ירקות בסיסי לשבוע">ירקות לשבוע</button>
               <button class="ai-chip" type="button" data-ai-prompt="סל למרק ירקות">מרק ירקות</button>
             </div>
-            <div id="aiSuggestions" class="ai-suggestions" aria-live="polite"></div>
-            <small id="aiStatus" class="hint"></small>
+            <div id="legacyAiSuggestions" class="ai-suggestions" aria-live="polite"></div>
+            <small id="legacyAiStatus" class="hint"></small>
           </div>
         </div>
 

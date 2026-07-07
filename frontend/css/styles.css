@@ -2109,7 +2109,229 @@ body.is-results-screen .details--card {
   color: var(--green-700);
 }
 
+#screen-basket .layout-split {
+  gap: 14px;
+  grid-template-columns: minmax(280px, .85fr) minmax(0, 1.15fr);
+}
+
+#screen-basket .basket-side-stack {
+  gap: 12px;
+}
+
+#screen-basket .card--pad {
+  padding: 16px;
+  border-radius: 20px;
+}
+
+#screen-basket .card__title {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+#screen-basket .card__head-row {
+  margin-bottom: 10px;
+}
+
+#screen-basket .grid {
+  gap: 10px;
+}
+
+#screen-basket .field {
+  gap: 4px;
+}
+
+#screen-basket .field input,
+#screen-basket .field select,
+#screen-basket .ai-card__inputRow > input {
+  height: 38px;
+  border-radius: 12px;
+  padding-inline: 10px;
+}
+
+#screen-basket .btn {
+  padding: 8px 13px;
+}
+
+#screen-basket .quick-add {
+  margin-top: 12px;
+}
+
+#screen-basket .quick-add__head {
+  margin-bottom: 8px;
+}
+
+#screen-basket .quick-products {
+  gap: 6px;
+  max-height: 220px;
+}
+
+#screen-basket .quick-product {
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 10px;
+}
+
+.ai-toggle-btn {
+  margin-top: 10px;
+}
+
+.ai-panel {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid rgba(205, 214, 201, .84);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .72);
+  direction: rtl;
+}
+
+.ai-panel.hidden {
+  display: none;
+}
+
+.ai-panel__header {
+  margin-bottom: 10px;
+}
+
+.ai-panel__header h4 {
+  margin: 0 0 3px;
+  font-size: 15px;
+  font-weight: 900;
+  color: #2d6f39;
+}
+
+.ai-panel__header p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.ai-panel__form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.ai-panel__form input {
+  min-width: 0;
+  height: 38px;
+  border: 1px solid rgba(137, 91, 60, .18);
+  border-radius: 12px;
+  padding: 0 10px;
+  font: inherit;
+  background: rgba(255, 255, 255, .82);
+}
+
+.ai-status {
+  min-height: 18px;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b574b;
+}
+
+.ai-suggestions {
+  display: grid;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.ai-suggestion {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(205, 214, 201, .84);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .76);
+  cursor: pointer;
+}
+
+.ai-suggestion__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ai-suggestion__main b {
+  font-size: 13px;
+  color: #2f3d2f;
+}
+
+.ai-suggestion__main small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.ai-suggestion__qty {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--green-700);
+  white-space: nowrap;
+}
+
+#aiAddSelectedBtn {
+  margin-top: 10px;
+}
+
+#screen-basket .ai-card__head {
+  gap: 10px;
+}
+
+#screen-basket .ai-card__spark {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+}
+
+#screen-basket .ai-card__text {
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+#screen-basket .ai-card__inputRow {
+  gap: 8px;
+  margin-top: 10px;
+}
+
+#screen-basket .ai-card__chips {
+  gap: 6px;
+  margin-top: 9px;
+}
+
+#screen-basket .ai-chip {
+  padding: 5px 10px;
+  font-size: 13px;
+}
+
+#screen-basket .empty--cart {
+  min-height: 150px;
+  padding: 14px 12px;
+}
+
+#screen-basket .empty__image {
+  width: min(160px, 62%);
+  margin-bottom: 6px;
+}
+
+#screen-basket .actions {
+  margin-top: 10px;
+}
+
 @media (max-width: 520px) {
+  .ai-panel__form {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-suggestion {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .ai-suggestion__qty {
+    grid-column: 2;
+  }
+
   .quick-product {
     align-items: stretch;
     flex-direction: column;
@@ -2120,6 +2342,37 @@ body.is-results-screen .details--card {
   }
 }
 
+@media (max-width: 960px) {
+  #screen-basket .layout-split {
+    grid-template-columns: 1fr;
+  }
+}
+
 .hero {
   display: none;
+}
+
+/* ===== רקע אחיד לכל דפי האתר ===== */
+html,
+body {
+  background-color: #f7f5e8 !important;
+}
+
+body,
+body.is-results-screen {
+  background-color: #f7f5e8 !important;
+  background-image:
+    linear-gradient(rgba(247, 245, 232, 0.80), rgba(247, 245, 232, 0.80)),
+    url("./2.png") !important;
+  background-repeat: repeat !important;
+  background-position: top left !important;
+  background-size: 360px 360px !important;
+  background-attachment: scroll !important;
+}
+
+/* מבטל את הרקע המיוחד שהיה רק במסך התוצאות */
+body.is-results-screen::before,
+body.is-results-screen::after {
+  display: none !important;
+  content: none !important;
 }
