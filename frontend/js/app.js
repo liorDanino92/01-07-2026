@@ -708,7 +708,7 @@ function renderResults(results, rec, mode) {
       const missingNames = getMissingNames(r.missing ?? []);
       const coveragePercent = r.coverageTotal ? Math.round((r.coverageFound / r.coverageTotal) * 100) : 0;
       const storeInitial = (r.storeName || "ח").trim().charAt(0);
-      const website = STORES.find(s => s.id === r.storeId)?.website || "#";
+      const website = r.website || "#";
       const ctaText = website === "#" ? "לאתר החנות" : "לאתר החנות";
 
       const card = document.createElement("article");

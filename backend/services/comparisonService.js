@@ -28,6 +28,8 @@ function calculateComparisons(basketItems, stores) {
     return {
       storeId: store.id,
       storeName: store.name,
+      storeName: store.name,
+      website: store.website,
       quality: store.quality,
       qualityWeight: QUALITY_WEIGHT[store.quality] ?? 1,
       coverageFound: found,
