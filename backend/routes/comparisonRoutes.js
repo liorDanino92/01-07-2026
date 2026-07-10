@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const { STORES } = require("../data/mockData");
+const { getStoresFromDb } = require("../services/storeService");
+
 const {
   calculateComparisons,
   pickRecommendation
 } = require("../services/comparisonService");
 
-router.post("/compare", (req, res) => {
+router.post("/compare", async (req, res) => {
   try {
     const { basket, mode, city } = req.body;
 
@@ -19,10 +21,18 @@ router.post("/compare", (req, res) => {
 
     const normalizedCity = typeof city === "string" ? city.trim() : "";
 
-    let filteredStores = STORES;
+    let stores = STORES;
+
+    try {
+      stores = await getStoresFromDb();
+    } catch (dbError) {
+      console.error("Database error, using mock data:", dbError.message);
+    }
+
+    let filteredStores = stores;
 
     if (normalizedCity) {
-      filteredStores = STORES.filter(store =>
+      filteredStores = stores.filter(store =>
         store.areas?.some(area => area.trim() === normalizedCity)
       );
     }
