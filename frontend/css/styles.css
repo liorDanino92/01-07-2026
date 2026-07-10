@@ -2142,7 +2142,7 @@ body.is-results-screen .details--card {
 
 #screen-basket .field input,
 #screen-basket .field select,
-#screen-basket .ai-card__inputRow > input {
+#screen-basket .ai-card__inputRow>input {
   height: 38px;
   border-radius: 12px;
   padding-inline: 10px;
@@ -2375,4 +2375,29 @@ body.is-results-screen::before,
 body.is-results-screen::after {
   display: none !important;
   content: none !important;
+}
+
+.input-error {
+  border: 2px solid #c0392b !important;
+  background: #fff5f5;
+}
+
+.input-error::placeholder {
+  color: #c0392b;
+}
+
+.input-error {
+  border: 2px solid #c0392b !important;
+  background: #fff5f5;
+}
+
+.field-error {
+  margin-top: 8px;
+  color: #c0392b;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.field-error.hidden {
+  display: none;
 }

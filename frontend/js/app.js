@@ -44,6 +44,9 @@ const backToPrefsBtn = el("backToPrefsBtn");
 const backToBasketBtn2 = el("backToBasketBtn2");
 const aboutBackBtn = el("aboutBackBtn");
 
+const cityInput = el("cityInput");
+const cityError = el("cityError");
+
 // === תוצאות ===
 const resultsTable = el("resultsTable");
 const resultsTbody = resultsTable.querySelector("tbody");
@@ -545,9 +548,18 @@ backToPrefsBtn.addEventListener("click", () => showScreen(screenPrefs));
 
 calcBtn.addEventListener("click", async () => {
   const mode = document.querySelector('input[name="mode"]:checked')?.value ?? "cheapest";
-  const cityInput = document.getElementById("cityInput");
   const user = getUser();
   const city = user?.city?.trim() || cityInput?.value.trim() || "";
+
+  if (!city) {
+    cityInput?.classList.add("input-error");
+    cityError?.classList.remove("hidden");
+    cityInput?.focus();
+    return;
+  }
+
+  cityInput?.classList.remove("input-error");
+  cityError?.classList.add("hidden");
 
   try {
     calcBtn.disabled = true;
@@ -581,6 +593,15 @@ calcBtn.addEventListener("click", async () => {
     calcBtn.disabled = false;
     calcBtn.textContent = "חשב תוצאות ←";
   }
+});
+
+cityInput?.addEventListener("input", () => {
+  cityInput.classList.remove("input-error");
+  cityError?.classList.add("hidden");
+});
+
+document.getElementById("cityInput")?.addEventListener("input", (e) => {
+  e.target.classList.remove("input-error");
 });
 
 // =================================================
