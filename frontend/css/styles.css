@@ -2401,3 +2401,126 @@ body.is-results-screen::after {
 .field-error.hidden {
   display: none;
 }
+
+/* ===== Basket actions ===== */
+.danger-soft {
+  color: #b93a2f;
+  border-color: #f0c7c2;
+  background: #fff7f6;
+}
+
+.danger-soft:hover {
+  color: #8f231a;
+  border-color: #df9b94;
+  background: #ffecea;
+}
+
+/* ===== Clickable summary pills ===== */
+.premium-pill--button {
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid rgba(116, 75, 48, .14);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.premium-pill--button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(47, 156, 74, .28);
+  box-shadow: 0 6px 14px rgba(47, 156, 74, .14);
+}
+
+/* ===== Summary details panel ===== */
+.summary-details-panel {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(47, 156, 74, .18);
+  background: rgba(255, 255, 255, .78);
+}
+
+.summary-details-panel.hidden {
+  display: none;
+}
+
+.summary-details-title {
+  font-weight: 800;
+  color: var(--green-700);
+  margin-bottom: 2px;
+}
+
+.summary-details-subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.summary-details-empty {
+  padding: 10px;
+  border-radius: 12px;
+  background: #f7fbf7;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ===== Coverage list inside top summary ===== */
+.summary-coverage-list {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.summary-coverage-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 11px;
+  border-radius: 13px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 13px;
+}
+
+.summary-coverage-item--found {
+  border-color: #c8ead1;
+  background: #f3fbf5;
+}
+
+.summary-coverage-item--missing {
+  border-color: #f1c6c1;
+  background: #fff4f2;
+}
+
+.summary-coverage-item__name {
+  font-weight: 800;
+}
+
+.summary-coverage-item__qty {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.summary-coverage-item__status {
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.summary-coverage-item--found .summary-coverage-item__status {
+  color: var(--ok);
+}
+
+.summary-coverage-item--missing .summary-coverage-item__status {
+  color: var(--bad);
+}
+
+/* ===== Selected store card ===== */
+.premium-store-card {
+  cursor: pointer;
+}
+
+.premium-store-card--selected {
+  border-color: var(--orange-500) !important;
+  box-shadow: 0 0 0 4px rgba(245, 124, 32, .14), var(--shadow-lg) !important;
+}

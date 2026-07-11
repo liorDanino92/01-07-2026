@@ -37,6 +37,7 @@ const basketTable = el("basketTable");
 const basketTbody = basketTable.querySelector("tbody");
 const basketEmpty = el("basketEmpty");
 const toPrefsBtn = el("toPrefsBtn");
+const clearBasketBtn = el("clearBasketBtn");
 
 // === ניווט בין מסכים ===
 const backToBasketBtn = el("backToBasketBtn");
@@ -279,6 +280,18 @@ function removeItem(productId) {
   renderBasket();
 }
 
+function clearBasket() {
+  if (basket.length === 0) return;
+
+  const approved = confirm("לנקות את כל הסל?");
+  if (!approved) return;
+
+  basket = [];
+  renderBasket();
+  renderProductOptions();
+  updateNavCartCount();
+}
+
 basketTbody.addEventListener("click", (e) => {
   const btn = e.target.closest("button");
   if (!btn) return;
@@ -288,6 +301,8 @@ basketTbody.addEventListener("click", (e) => {
   if (action === "inc") adjustItem(productId, 1);
   if (action === "dec") adjustItem(productId, -1);
 });
+
+clearBasketBtn?.addEventListener("click", clearBasket);
 
 productSearch?.addEventListener("input", () => renderProductOptions());
 categorySelect?.addEventListener("change", () => { renderProductOptions(); productSearch?.focus(); });
@@ -627,6 +642,62 @@ function getMissingNames(missing = []) {
   return missing.map(productNameById);
 }
 
+function getBasketCoverageItems(storeResult) {
+  const missingSet = new Set(storeResult.missing ?? []);
+
+  return basket.map(item => {
+    const product = findProduct(item.productId);
+    const productName = product?.name ?? item.productId;
+    const unit = product?.unit ?? "";
+    const isMissing = missingSet.has(item.productId);
+
+    return {
+      productId: item.productId,
+      name: productName,
+      qty: item.qty,
+      unit,
+      isMissing
+    };
+  });
+}
+
+function renderCoverageItemsList(storeResult, type = "all") {
+  const items = getBasketCoverageItems(storeResult);
+
+  const filteredItems = type === "missing"
+    ? items.filter(item => item.isMissing)
+    : items;
+
+  if (filteredItems.length === 0) {
+    return `
+      <div class="summary-details-empty">
+        אין פריטים להצגה.
+      </div>
+    `;
+  }
+
+  return `
+    <ul class="summary-coverage-list">
+      ${filteredItems.map(item => `
+        <li class="summary-coverage-item ${item.isMissing ? "summary-coverage-item--missing" : "summary-coverage-item--found"}">
+          <span class="summary-coverage-item__icon">${item.isMissing ? "❌" : "✅"}</span>
+          <span class="summary-coverage-item__name">${escapeHtml(item.name)}</span>
+          <span class="summary-coverage-item__qty">${escapeHtml(item.qty)} ${escapeHtml(item.unit)}</span>
+          <span class="summary-coverage-item__status">${item.isMissing ? "חסר" : "נמצא"}</span>
+        </li>
+      `).join("")}
+    </ul>
+  `;
+}
+
+function getSummaryModeLabel(storeResult, modeLabel) {
+  if (storeResult.coverageFound === storeResult.coverageTotal) {
+    return "כיסוי סל מלא";
+  }
+
+  return modeLabel;
+}
+
 function recommendationReason(store, modeLabel) {
   if (!store) return "";
   const parts = [];
@@ -658,6 +729,77 @@ function renderResults(results, rec, mode) {
     ? validPrices.reduce((sum, price) => sum + price, 0) / validPrices.length
     : null;
 
+  function renderSummaryCard(storeResult, isRecommended = false) {
+    const selectedPrice = storeResult?.totalWithDelivery ?? storeResult?.subtotal;
+    const saving = avgPrice && typeof selectedPrice === "number"
+      ? Math.max(0, avgPrice - selectedPrice)
+      : 0;
+
+    const missingNames = getMissingNames(storeResult?.missing ?? []);
+    const selectedModeLabel = getSummaryModeLabel(storeResult, modeLabel);
+
+    resultsSummary.innerHTML = `
+        <div class="premium-summary__content">
+          <span class="premium-summary__eyebrow">
+            ${isRecommended ? "מצאנו עבורך את הבחירה המתאימה ביותר" : "פרטי החנות שבחרת"}
+          </span>
+
+          <h3 class="premium-summary__title">${storeResult?.storeName ?? ""}</h3>
+
+          <p class="premium-summary__text">
+            ${isRecommended
+        ? recommendationReason(storeResult, modeLabel)
+        : `סקירת מחיר וכיסוי סל עבור ${storeResult?.storeName ?? "החנות שנבחרה"}`}
+          </p>
+
+          <div class="premium-summary__badges">
+            <span class="premium-pill premium-pill--green">🏆 ${selectedModeLabel}</span>
+
+            <button class="premium-pill premium-pill--button" type="button" data-summary-action="coverage">
+              🛒 ${storeResult.coverageFound}/${storeResult.coverageTotal || basketCount} נמצאו
+            </button>
+
+            <span class="premium-pill">🚚 משלוח ${formatPrice(storeResult.deliveryFee)}</span>
+
+            <button class="premium-pill premium-pill--button ${missingNames.length ? "premium-pill--warn" : "premium-pill--green"}" type="button" data-summary-action="missing">
+              ${missingNames.length ? `חסרים ${missingNames.length}` : "כל הסל נמצא"}
+            </button>
+          </div>
+
+          <div id="summaryDetailsPanel" class="summary-details-panel hidden"></div>
+        </div>
+
+        <div class="premium-summary__priceBox">
+          <span class="premium-summary__priceLabel">סה״כ כולל משלוח</span>
+          <strong>${formatPrice(selectedPrice)}</strong>
+          ${saving > 0
+        ? `<span class="premium-summary__saving">חיסכון משוער ${formatPrice(saving)}</span>`
+        : `<span class="premium-summary__saving">${isRecommended ? "הבחירה המומלצת לסל שלך" : "החנות שנבחרה להצגה"}</span>`
+      }
+        </div>
+      `;
+
+    const detailsPanel = resultsSummary.querySelector("#summaryDetailsPanel");
+
+    resultsSummary.querySelector('[data-summary-action="coverage"]')?.addEventListener("click", () => {
+      detailsPanel.classList.toggle("hidden");
+      detailsPanel.innerHTML = `
+          <div class="summary-details-title">פירוט פריטי הסל בחנות ${escapeHtml(storeResult.storeName)}</div>
+          <div class="summary-details-subtitle">מוצרים שנמצאו ומוצרים שחסרים בחנות זו</div>
+          ${renderCoverageItemsList(storeResult, "all")}
+        `;
+    });
+
+    resultsSummary.querySelector('[data-summary-action="missing"]')?.addEventListener("click", () => {
+      detailsPanel.classList.toggle("hidden");
+      detailsPanel.innerHTML = `
+          <div class="summary-details-title">מוצרים חסרים בחנות ${escapeHtml(storeResult.storeName)}</div>
+          <div class="summary-details-subtitle">אלו פריטים מהסל שלא נמצאו בחנות שנבחרה</div>
+          ${renderCoverageItemsList(storeResult, "missing")}
+        `;
+    });
+  }
+
   // ----- כרטיס סיכום עליון -----
   resultsSummary.className = "summary-card premium-results-summary";
 
@@ -672,28 +814,8 @@ function renderResults(results, rec, mode) {
     `;
   } else {
     const recStore = sortedResults.find(r => r.storeId === rec.storeId) ?? sortedResults[0];
-    const recPrice = recStore?.totalWithDelivery ?? recStore?.subtotal;
-    const saving = avgPrice && typeof recPrice === "number" ? Math.max(0, avgPrice - recPrice) : 0;
-    const missingNames = getMissingNames(recStore?.missing ?? []);
 
-    resultsSummary.innerHTML = `
-      <div class="premium-summary__content">
-        <span class="premium-summary__eyebrow">מצאנו עבורך את הבחירה המתאימה ביותר</span>
-        <h3 class="premium-summary__title">${recStore?.storeName ?? ""}</h3>
-        <p class="premium-summary__text">${recommendationReason(recStore, modeLabel)}</p>
-        <div class="premium-summary__badges">
-          <span class="premium-pill premium-pill--green">🏆 ${modeLabel}</span>
-          <span class="premium-pill">🛒 ${recStore.coverageFound}/${recStore.coverageTotal || basketCount} נמצאו</span>
-          <span class="premium-pill">🚚 משלוח ${formatPrice(recStore.deliveryFee)}</span>
-          ${missingNames.length ? `<span class="premium-pill premium-pill--warn">חסרים ${missingNames.length}</span>` : `<span class="premium-pill premium-pill--green">כל הסל נמצא</span>`}
-        </div>
-      </div>
-      <div class="premium-summary__priceBox">
-        <span class="premium-summary__priceLabel">סה״כ כולל משלוח</span>
-        <strong>${formatPrice(recPrice)}</strong>
-        ${saving > 0 ? `<span class="premium-summary__saving">חיסכון משוער ${formatPrice(saving)}</span>` : `<span class="premium-summary__saving">הבחירה המומלצת לסל שלך</span>`}
-      </div>
-    `;
+    renderSummaryCard(recStore, true);
   }
 
   // ----- כרטיסי חנות -----
@@ -714,6 +836,8 @@ function renderResults(results, rec, mode) {
 
       const card = document.createElement("article");
       card.className = "store-card premium-store-card" + (isRec ? " store-card--recommended premium-store-card--winner" : "");
+      card.dataset.storeId = r.storeId;
+      card.tabIndex = 0;
       card.innerHTML = `
         ${isRec ? `<span class="premium-winner-badge">👑 הכי משתלם</span>` : `<span class="premium-rank">${index + 1}</span>`}
 
@@ -729,7 +853,6 @@ function renderResults(results, rec, mode) {
             <span>המחיר הסופי</span>
             <strong>${formatPrice(totalValue)}</strong>
           </div>
-
           <div class="coverage-line" title="כיסוי סל">
             <span class="coverage-line__label">כיסוי סל</span>
             <div class="coverage-line__track"><span style="width:${coveragePercent}%"></span></div>
@@ -754,6 +877,23 @@ function renderResults(results, rec, mode) {
         </div>
       `;
       storeCards.appendChild(card);
+      card.addEventListener("click", (event) => {
+        if (event.target.closest("a")) return;
+
+        renderSummaryCard(r, false);
+
+        document.querySelectorAll(".premium-store-card").forEach(c => {
+          c.classList.remove("premium-store-card--selected");
+        });
+
+        card.classList.add("premium-store-card--selected");
+
+        resultsSummary.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      });
+
     });
   }
 
