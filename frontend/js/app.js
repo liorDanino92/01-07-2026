@@ -1,4 +1,5 @@
 import { PRODUCTS } from "./data.js";
+const API_BASE_URL = "https://01-07-2026-production.up.railway.app";
 
 const el = (id) => document.getElementById(id);
 
@@ -367,7 +368,7 @@ async function requestAiBasketSuggestions() {
   if (aiSuggestionsList) aiSuggestionsList.innerHTML = "";
 
   try {
-    const response = await fetch("http://localhost:3000/api/ai-basket-suggestions", {
+    const response = await fetch(`${API_BASE_URL}/api/ai-basket-suggestions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -565,7 +566,7 @@ calcBtn.addEventListener("click", async () => {
     calcBtn.disabled = true;
     calcBtn.textContent = "מחשב תוצאות...";
 
-    const response = await fetch("http://localhost:3000/api/compare", {
+    const response = await fetch(`${API_BASE_URL}/api/compare`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
