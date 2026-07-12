@@ -830,7 +830,7 @@ function renderResults(results, rec, mode) {
       const totalValue = r.meetsMinOrder ? r.totalWithDelivery : r.subtotal;
       const missingNames = getMissingNames(r.missing ?? []);
       const coveragePercent = r.coverageTotal ? Math.round((r.coverageFound / r.coverageTotal) * 100) : 0;
-      const storeInitial = (r.storeName || "ח").trim().charAt(0);
+      const storeLogoUrl = "./assets/noyhasade.SuO8xM4_.png";
       const website = r.website || "#";
       const ctaText = website === "#" ? "לאתר החנות" : "לאתר החנות";
 
@@ -841,7 +841,9 @@ function renderResults(results, rec, mode) {
       card.innerHTML = `
         ${isRec ? `<span class="premium-winner-badge">👑 הכי משתלם</span>` : `<span class="premium-rank">${index + 1}</span>`}
 
-        <div class="premium-store-card__logo" aria-hidden="true">${storeInitial}</div>
+        <div class="premium-store-card__logo">
+          <img src="${storeLogoUrl}" alt="לוגו ${escapeHtml(r.storeName)}">
+        </div>
 
         <div class="premium-store-card__main">
           <div class="premium-store-card__head">
