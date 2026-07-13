@@ -690,6 +690,20 @@ function renderCoverageItemsList(storeResult, type = "all") {
   `;
 }
 
+const STORE_LOGOS = {
+  shookit: "./assets/stores/shookit-logo.png",
+  noy_hasade: "./assets/stores/noyhasade.SuO8xM4_.png",
+  freshuk: "./assets/stores/freshuk.png",
+  aleh_online: "./assets/stores/alehonline.png",
+  moshavnik: "./assets/stores/moshavnik.png",
+  zanzuri: "./assets/stores/Logo_Zanzuri-1-2.png",
+  asif_market: "./assets/stores/asif.png"
+};
+
+function getStoreLogoUrl(storeId) {
+  return STORE_LOGOS[storeId] || "";
+}
+
 function getSummaryModeLabel(storeResult, modeLabel) {
   if (storeResult.coverageFound === storeResult.coverageTotal) {
     return "כיסוי סל מלא";
