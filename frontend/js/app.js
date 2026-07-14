@@ -697,7 +697,9 @@ const STORE_LOGOS = {
   aleh_online: "./assets/stores/alehonline.png",
   moshavnik: "./assets/stores/moshavnik.png",
   zanzuri: "./assets/stores/Logo_Zanzuri-1-2.png",
-  asif_market: "./assets/stores/asif.png"
+  asif_market: "./assets/stores/asif.png",
+  king_field: "./assets/stores/k-hasade.png",
+  fruit_valley: "./assets/stores/fruitvalley.png"
 };
 
 function getStoreLogoUrl(storeId) {
