@@ -6,6 +6,7 @@ const cors = require("cors");
 const comparisonRoutes = require("./routes/comparisonRoutes");
 const aiBasketRoutes = require("./routes/aiBasketRoutes");
 const authRoutes = require("./routes/authRoutes");
+const basketRoutes = require("./routes/basketRoutes");
 
 
 const app = express();
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 app.use("/api", comparisonRoutes);
 app.use("/api", aiBasketRoutes);
 app.use("/api", authRoutes);
+app.use("/api", basketRoutes);
 
 const PORT = process.env.PORT || 3000;
 
