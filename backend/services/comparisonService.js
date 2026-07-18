@@ -9,15 +9,34 @@ function calculateComparisons(basketItems, stores) {
     let subtotal = 0;
     let found = 0;
     const missing = [];
+    const itemsBreakdown = [];
 
     for (const item of basketItems) {
       const pricePerUnit = store.prices[item.productId];
 
       if (typeof pricePerUnit === "number") {
+        const lineTotal = pricePerUnit * item.qty;
+
         found++;
-        subtotal += pricePerUnit * item.qty;
+        subtotal += lineTotal;
+
+        itemsBreakdown.push({
+          productId: item.productId,
+          qty: item.qty,
+          pricePerUnit: round2(pricePerUnit),
+          lineTotal: round2(lineTotal),
+          found: true
+        });
       } else {
         missing.push(item.productId);
+
+        itemsBreakdown.push({
+          productId: item.productId,
+          qty: item.qty,
+          pricePerUnit: null,
+          lineTotal: null,
+          found: false
+        });
       }
     }
 
@@ -35,7 +54,8 @@ function calculateComparisons(basketItems, stores) {
       minOrder: store.minOrder,
       meetsMinOrder,
       totalWithDelivery: meetsMinOrder ? round2(subtotal + store.deliveryFee) : null,
-      missing
+      missing,
+      itemsBreakdown
     };
   });
 }
