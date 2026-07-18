@@ -80,6 +80,109 @@ const rememberMe = el("rememberMe");
 const loginBtn = el("loginBtn");
 const goToRegisterBtn = el("goToRegisterBtn");
 const loginStatus = el("loginStatus");
+// === Modal כללי ===
+const appModal = el("appModal");
+const modalIcon = el("modalIcon");
+const modalTitle = el("modalTitle");
+const modalText = el("modalText");
+const modalInputWrap = el("modalInputWrap");
+const modalInputLabel = el("modalInputLabel");
+const modalInput = el("modalInput");
+const modalInputHint = el("modalInputHint");
+const modalError = el("modalError");
+const modalCancelBtn = el("modalCancelBtn");
+const modalConfirmBtn = el("modalConfirmBtn");
+
+let modalResolve = null;
+
+function closeAppModal(result = null) {
+  appModal?.classList.add("hidden");
+  appModal?.classList.remove("app-modal--danger");
+
+  if (modalResolve) {
+    modalResolve(result);
+    modalResolve = null;
+  }
+}
+
+function openAppModal(options = {}) {
+  return new Promise(resolve => {
+    modalResolve = resolve;
+
+    const {
+      type = "info",
+      icon = "🧺",
+      title = "",
+      text = "",
+      confirmText = "אישור",
+      cancelText = "ביטול",
+      input = false,
+      inputLabel = "שם",
+      inputPlaceholder = "",
+      inputValue = "",
+      inputHint = "",
+      validate = null
+    } = options;
+
+    modalIcon.textContent = icon;
+    modalTitle.textContent = title;
+    modalText.textContent = text;
+    modalConfirmBtn.textContent = confirmText;
+    modalCancelBtn.textContent = cancelText;
+
+    modalError.textContent = "";
+    modalError.classList.add("hidden");
+
+    appModal.classList.toggle("app-modal--danger", type === "danger");
+
+    if (input) {
+      modalInputWrap.classList.remove("hidden");
+      modalInputLabel.textContent = inputLabel;
+      modalInput.placeholder = inputPlaceholder;
+      modalInput.value = inputValue;
+      modalInputHint.textContent = inputHint;
+    } else {
+      modalInputWrap.classList.add("hidden");
+      modalInput.value = "";
+      modalInputHint.textContent = "";
+    }
+
+    appModal.classList.remove("hidden");
+
+    setTimeout(() => {
+      if (input) modalInput.focus();
+      else modalConfirmBtn.focus();
+    }, 50);
+
+    modalConfirmBtn.onclick = () => {
+      const value = input ? modalInput.value.trim() : true;
+
+      if (validate) {
+        const error = validate(value);
+
+        if (error) {
+          modalError.textContent = error;
+          modalError.classList.remove("hidden");
+          return;
+        }
+      }
+
+      closeAppModal(input ? value : true);
+    };
+
+    modalCancelBtn.onclick = () => closeAppModal(null);
+
+    appModal.querySelectorAll("[data-modal-close]").forEach(btn => {
+      btn.onclick = () => closeAppModal(null);
+    });
+  });
+}
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && appModal && !appModal.classList.contains("hidden")) {
+    closeAppModal(null);
+  }
+});
 
 // סל בזיכרון: [{ productId, qty }]
 let basket = [];
@@ -1257,11 +1360,26 @@ async function saveCurrentBasket() {
     return;
   }
 
-  const name = prompt("איך לקרוא לסל הזה?", "הסל השבועי שלי");
+  const name = await openAppModal({
+    icon: "💾",
+    title: "שמירת סל",
+    text: "בחר שם ברור לסל כדי שתוכל לזהות אותו בקלות בהמשך.",
+    confirmText: "שמור סל",
+    cancelText: "ביטול",
+    input: true,
+    inputLabel: "שם הסל",
+    inputPlaceholder: "לדוגמה: סל שבועי למשפחה",
+    inputValue: "הסל השבועי שלי",
+    inputHint: "מומלץ לבחור שם קצר וברור.",
+    validate: (value) => {
+      if (!value) return "יש להזין שם לסל.";
+      if (value.length < 2) return "שם הסל קצר מדי.";
+      if (value.length > 40) return "שם הסל יכול להכיל עד 40 תווים.";
+      return "";
+    }
+  });
 
-  if (!name || !name.trim()) {
-    return;
-  }
+  if (!name) return;
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/baskets`, {
@@ -1293,7 +1411,15 @@ async function deleteSavedBasket(basketId) {
   const user = requireLoggedUser();
   if (!user) return;
 
-  const approved = confirm("למחוק את הסל השמור?");
+  const approved = await openAppModal({
+    type: "danger",
+    icon: "🗑️",
+    title: "מחיקת סל שמור",
+    text: "הפעולה תמחק את הסל מהרשימה שלך. לא ניתן לשחזר את הסל לאחר המחיקה.",
+    confirmText: "מחק סל",
+    cancelText: "ביטול"
+  });
+
   if (!approved) return;
 
   try {

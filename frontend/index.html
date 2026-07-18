@@ -460,6 +460,33 @@
 
   <button class="scroll-top-btn" type="button" data-scroll-top aria-label="חזרה לראש העמוד">↑</button>
 
+  <!-- ===== App Modal ===== -->
+<div id="appModal" class="app-modal hidden" role="dialog" aria-modal="true">
+  <div class="app-modal__backdrop" data-modal-close></div>
+
+  <div class="app-modal__box">
+    <button class="app-modal__close" type="button" data-modal-close aria-label="סגור">×</button>
+
+    <div class="app-modal__icon" id="modalIcon">🧺</div>
+
+    <h3 id="modalTitle">כותרת</h3>
+    <p id="modalText" class="muted">טקסט</p>
+
+    <div id="modalInputWrap" class="field hidden">
+      <label id="modalInputLabel" for="modalInput">שם</label>
+      <input id="modalInput" type="text" />
+      <small id="modalInputHint" class="hint"></small>
+    </div>
+
+    <div id="modalError" class="field-error hidden"></div>
+
+    <div class="app-modal__actions">
+      <button id="modalCancelBtn" class="btn ghost" type="button">ביטול</button>
+      <button id="modalConfirmBtn" class="btn primary" type="button">אישור</button>
+    </div>
+  </div>
+</div>
+
   <script type="module" src="./js/app.js"></script>
 </body>
 
