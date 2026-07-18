@@ -997,7 +997,7 @@ function renderAuthStatus() {
   authPhone.value = user.phone || "";
   authName.value = user.name || "";
   authCity.value = user.city || "";
-  if (authPassword) authPassword.value = user.password || "";
+  if (authPassword) authPassword.value = "";
   authSaveBtn.textContent = "שמור שינויים";
   authLogoutBtn.classList.remove("hidden");
   if (authStatus) authStatus.textContent = `מחובר בתור: ${user.name}`;
@@ -1005,36 +1005,105 @@ function renderAuthStatus() {
 
 goToRegisterBtn?.addEventListener("click", () => showScreen(screenAuth));
 
-loginBtn?.addEventListener("click", () => {
+loginBtn?.addEventListener("click", async () => {
   const email = loginEmail.value.trim();
   const password = loginPassword.value.trim();
+
   if (!email || !password) {
-    loginStatus.textContent = "יש להזין אימייל וסיסמה."; return;
+    loginStatus.textContent = "יש להזין אימייל וסיסמה.";
+    return;
   }
-  const existingUser = getUser();
-  if (!existingUser || existingUser.email !== email || existingUser.password !== password) {
-    loginStatus.textContent = "המשתמש לא נמצא. ניתן לעבור להרשמה."; return;
+
+  try {
+    loginBtn.disabled = true;
+    loginStatus.textContent = "מתחבר...";
+
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "שגיאה בהתחברות.");
+    }
+
+    saveUser(data.user);
+
+    loginStatus.textContent = rememberMe?.checked
+      ? "✅ התחברת והמשתמש ייזכר בדפדפן זה."
+      : "✅ התחברת בהצלחה.";
+
+    renderAuthStatus();
+    showScreen(screenBasket);
+  } catch (error) {
+    loginStatus.textContent = error.message || "שגיאה בהתחברות.";
+  } finally {
+    loginBtn.disabled = false;
   }
-  loginStatus.textContent = rememberMe?.checked
-    ? "✅ התחברת והמשתמש ייזכר בדפדפן זה."
-    : "✅ התחברת בהצלחה.";
-  renderAuthStatus();
-  showScreen(screenBasket);
 });
 
-authSaveBtn?.addEventListener("click", () => {
+authSaveBtn?.addEventListener("click", async () => {
   const email = authEmail.value.trim();
   const phone = authPhone.value.trim();
   const name = authName.value.trim();
   const city = authCity.value.trim();
   const password = authPassword.value.trim();
+
   if (!email || !phone || !name || !city || !password) {
-    authStatus.textContent = "יש למלא את כל השדות."; return;
+    authStatus.textContent = "יש למלא את כל השדות.";
+    return;
   }
-  saveUser({ email, phone, name, city, password });
-  renderAuthStatus();
-  authStatus.textContent = "✅ הפרטים נשמרו.";
-  showScreen(screenBasket);
+
+  const passwordHasLetter = /[A-Za-z]/.test(password);
+  const passwordHasNumber = /\d/.test(password);
+
+  if (password.length < 6 || !passwordHasLetter || !passwordHasNumber) {
+    authStatus.textContent = "הסיסמה חייבת להכיל לפחות 6 תווים, אות אחת ומספר אחד.";
+    return;
+  }
+
+  try {
+    authSaveBtn.disabled = true;
+    authStatus.textContent = "שומר משתמש...";
+
+    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        city,
+        password
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "שגיאה בהרשמה.");
+    }
+
+    saveUser(data.user);
+
+    renderAuthStatus();
+    authStatus.textContent = "✅ נרשמת בהצלחה.";
+    showScreen(screenBasket);
+  } catch (error) {
+    authStatus.textContent = error.message || "שגיאה בהרשמה.";
+  } finally {
+    authSaveBtn.disabled = false;
+  }
 });
 
 authLogoutBtn?.addEventListener("click", () => {
