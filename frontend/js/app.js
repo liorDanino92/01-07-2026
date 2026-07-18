@@ -126,6 +126,10 @@ function showScreen(which) {
   for (const s of screens) s.classList.add("hidden");
   which.classList.remove("hidden");
 
+  if (which === screenSaved) {
+    fetchSavedBaskets();
+  }
+
   document.body.classList.toggle("is-results-screen", which === screenResults);
 
   // עדכון כפתור פעיל בתפריט
@@ -561,6 +565,25 @@ toPrefsBtn.addEventListener("click", () => showScreen(screenPrefs));
 backToBasketBtn.addEventListener("click", () => showScreen(screenBasket));
 backToBasketBtn2.addEventListener("click", () => showScreen(screenBasket));
 backToPrefsBtn.addEventListener("click", () => showScreen(screenPrefs));
+
+document.querySelectorAll("[data-go-screen]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = btn.dataset.goScreen;
+
+    if (target === "basket") showScreen(screenBasket);
+    if (target === "prefs") showScreen(screenPrefs);
+    if (target === "results") showScreen(screenResults);
+    if (target === "about") showScreen(screenAbout);
+    if (target === "saved") showScreen(screenSaved);
+  });
+});
+
+document.querySelector("[data-scroll-top]")?.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
 
 calcBtn.addEventListener("click", async () => {
   const mode = document.querySelector('input[name="mode"]:checked')?.value ?? "cheapest";
@@ -1025,34 +1048,207 @@ authLogoutBtn?.addEventListener("click", () => {
 authBackBtn?.addEventListener("click", () => showScreen(screenBasket));
 
 // =================================================
-// סלים שמורים
+// סלים שמורים מול Supabase דרך Backend
 // =================================================
-function saveBasketToStorage() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(basket));
-  if (savedStatus) savedStatus.textContent = "✅ הסל נשמר בהצלחה.";
+const savedLoginNotice = document.getElementById("savedLoginNotice");
+const savedContent = document.getElementById("savedContent");
+const savedBasketsList = document.getElementById("savedBasketsList");
+const saveCurrentBasketBtn = document.getElementById("saveCurrentBasketBtn");
+const saveBasketFromBuilderBtn = document.getElementById("saveBasketFromBuilderBtn");
+
+function getSavedBasketProductLabel(item) {
+  const product = findProduct(item.productId);
+  const name = product?.name ?? item.productId;
+  const unit = product?.unit ?? "";
+  return `${name} · ${item.qty} ${unit}`;
 }
-function loadBasketFromStorage() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) { if (savedStatus) savedStatus.textContent = "אין סל שמור עדיין."; return; }
+
+function requireLoggedUser(messageTarget = savedStatus) {
+  const user = getUser();
+
+  if (!user?.id) {
+    if (messageTarget) {
+      messageTarget.textContent = "יש להתחבר לפני שימוש בסלים שמורים.";
+    }
+    showScreen(screenAuthLogin);
+    return null;
+  }
+
+  return user;
+}
+
+async function fetchSavedBaskets() {
+  const user = getUser();
+
+  if (!user?.id) {
+    savedLoginNotice?.classList.remove("hidden");
+    savedContent?.classList.add("hidden");
+    return;
+  }
+
+  savedLoginNotice?.classList.add("hidden");
+  savedContent?.classList.remove("hidden");
+
+  if (savedStatus) savedStatus.textContent = "טוען סלים שמורים...";
+
   try {
-    basket = JSON.parse(raw) || [];
-    renderBasket();
-    updateNavCartCount();
-    if (savedStatus) savedStatus.textContent = "✅ סל נטען בהצלחה.";
-  } catch {
-    if (savedStatus) savedStatus.textContent = "שגיאה בטעינת סל שמור.";
+    const response = await fetch(`${API_BASE_URL}/api/baskets/${user.id}`);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "שגיאה בטעינת הסלים.");
+    }
+
+    renderSavedBaskets(data.baskets || []);
+
+    if (savedStatus) {
+      savedStatus.textContent = data.baskets?.length
+        ? `נמצאו ${data.baskets.length} סלים שמורים.`
+        : "אין עדיין סלים שמורים.";
+    }
+  } catch (error) {
+    if (savedStatus) savedStatus.textContent = error.message || "שגיאה בטעינת הסלים.";
   }
 }
-function clearBasketFromStorage() {
-  localStorage.removeItem(STORAGE_KEY);
-  if (savedStatus) savedStatus.textContent = "🗑️ סל שמור נמחק.";
+
+function renderSavedBaskets(savedBaskets) {
+  if (!savedBasketsList) return;
+
+  if (!savedBaskets.length) {
+    savedBasketsList.innerHTML = `
+      <div class="empty">
+        <div class="empty__icon">🧺</div>
+        <p>עדיין לא שמרת סלים.</p>
+        <small class="muted">בנה סל, לחץ על “שמור סל”, ותוכל לחזור אליו בכל זמן.</small>
+      </div>
+    `;
+    return;
+  }
+
+  savedBasketsList.innerHTML = savedBaskets.map(savedBasket => {
+    const items = Array.isArray(savedBasket.items) ? savedBasket.items : [];
+    const dateText = savedBasket.updated_at
+      ? new Date(savedBasket.updated_at).toLocaleDateString("he-IL")
+      : "";
+
+    return `
+      <article class="saved-basket-card">
+        <div class="saved-basket-card__head">
+          <div>
+            <h3>${escapeHtml(savedBasket.name)}</h3>
+            <p class="muted">${items.length} מוצרים · עודכן בתאריך ${escapeHtml(dateText)}</p>
+          </div>
+
+          <div class="saved-basket-card__actions">
+            <button class="btn primary" type="button" data-saved-action="load" data-id="${escapeHtml(savedBasket.id)}">טען סל</button>
+            <button class="btn danger" type="button" data-saved-action="delete" data-id="${escapeHtml(savedBasket.id)}">מחק</button>
+          </div>
+        </div>
+
+        <details class="saved-basket-card__details">
+          <summary>הצג פריטים בסל</summary>
+          <ul>
+            ${items.map(item => `<li>${escapeHtml(getSavedBasketProductLabel(item))}</li>`).join("")}
+          </ul>
+        </details>
+      </article>
+    `;
+  }).join("");
+
+  savedBasketsList.querySelectorAll("[data-saved-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const action = btn.dataset.savedAction;
+      const id = btn.dataset.id;
+      const selectedBasket = savedBaskets.find(x => x.id === id);
+
+      if (!selectedBasket) return;
+
+      if (action === "load") {
+        basket = Array.isArray(selectedBasket.items) ? selectedBasket.items : [];
+        renderBasket();
+        renderProductOptions();
+        updateNavCartCount();
+        if (savedStatus) savedStatus.textContent = `✅ הסל "${selectedBasket.name}" נטען לעגלה.`;
+        showScreen(screenBasket);
+      }
+
+      if (action === "delete") {
+        deleteSavedBasket(selectedBasket.id);
+      }
+    });
+  });
+}
+
+async function saveCurrentBasket() {
+  const user = requireLoggedUser();
+  if (!user) return;
+
+  if (!basket.length) {
+    alert("לא ניתן לשמור סל ריק.");
+    return;
+  }
+
+  const name = prompt("איך לקרוא לסל הזה?", "הסל השבועי שלי");
+
+  if (!name || !name.trim()) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/baskets`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        name: name.trim(),
+        items: basket
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "שגיאה בשמירת הסל.");
+    }
+
+    if (savedStatus) savedStatus.textContent = `✅ הסל "${data.basket.name}" נשמר.`;
+    await fetchSavedBaskets();
+  } catch (error) {
+    alert(error.message || "שגיאה בשמירת הסל.");
+  }
+}
+
+async function deleteSavedBasket(basketId) {
+  const user = requireLoggedUser();
+  if (!user) return;
+
+  const approved = confirm("למחוק את הסל השמור?");
+  if (!approved) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/baskets/${basketId}?userId=${encodeURIComponent(user.id)}`, {
+      method: "DELETE"
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "שגיאה במחיקת הסל.");
+    }
+
+    if (savedStatus) savedStatus.textContent = "🗑️ הסל נמחק.";
+    await fetchSavedBaskets();
+  } catch (error) {
+    alert(error.message || "שגיאה במחיקת הסל.");
+  }
 }
 
 aboutBackBtn?.addEventListener("click", () => showScreen(screenBasket));
 savedBackBtn?.addEventListener("click", () => showScreen(screenBasket));
-saveBasketBtn?.addEventListener("click", saveBasketToStorage);
-loadBasketBtn?.addEventListener("click", loadBasketFromStorage);
-clearSavedBtn?.addEventListener("click", clearBasketFromStorage);
+saveCurrentBasketBtn?.addEventListener("click", saveCurrentBasket);
+saveBasketFromBuilderBtn?.addEventListener("click", saveCurrentBasket);
 
 // =================================================
 // אתחול

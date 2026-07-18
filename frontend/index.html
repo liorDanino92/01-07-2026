@@ -15,7 +15,7 @@
   <header class="appbar">
     <div class="container appbar__inner">
       <div class="brand">
-        <img src="./css/sal.png" alt="לוגו הסל החכם" class="brand__logo">
+        <img src="./css/Logo-SAL.png" alt="לוגו הסל החכם" class="brand__logo">
         <div class="brand__text">
           <span class="brand__title">הסל החכם</span>
           <span class="brand__sub">פירות וירקות · השוואה חכמה בין חנויות</span>
@@ -157,7 +157,11 @@
 
           <div class="actions actions--between">
             <button id="clearBasketBtn" class="btn ghost danger-soft" type="button">נקה סל</button>
-            <button id="toPrefsBtn" class="btn primary" disabled>המשך להשוואה ←</button>
+
+            <div class="actions">
+              <button id="saveBasketFromBuilderBtn" class="btn" type="button">💾 שמור סל</button>
+              <button id="toPrefsBtn" class="btn primary" disabled>המשך להשוואה ←</button>
+            </div>
           </div>
         </div>
       </div>
@@ -168,6 +172,9 @@
       <div class="screen__header">
         <h2>שלב 2 · העדפות</h2>
         <p class="muted">בחר עיר וסוג ההמלצה שמתאימה לך.</p>
+        <div class="screen-top-actions">
+          <button class="btn ghost" type="button" data-go-screen="basket">→ חזרה לעריכת סל</button>
+        </div>
       </div>
 
       <div class="card card--pad card--narrow">
@@ -190,14 +197,13 @@
               </div>
             </label>
             <label class="radio-card">
-              <input type="radio" name="mode" value="bestValue" />
+              <input type="radio" name="mode" value="bestCoverage" />
               <div>
-                <b>הכי משתלם</b>
-                <span class="muted">מחיר + איכות + כיסוי סל</span>
+                <b>כיסוי סל מקסימלי</b>
+                <span class="muted">החנות שמחזיקה הכי הרבה מוצרים מהסל שלך</span>
               </div>
             </label>
           </div>
-          <small class="hint">איכות מדורגת: פרימיום / מובחר / מוזל.</small>
         </div>
 
         <div class="actions actions--between">
@@ -212,6 +218,10 @@
       <div class="screen__header">
         <h2>שלב 3 · תוצאות השוואה</h2>
         <p class="muted">סקירה השוואתית של כל חנות לפי הסל וההעדפות שלך.</p>
+        <div class="screen-top-actions">
+          <button class="btn ghost" type="button" data-go-screen="prefs">→ חזרה להעדפות</button>
+          <button class="btn" type="button" data-go-screen="basket">חזרה לעריכת סל</button>
+        </div>
       </div>
 
       <!-- Top summary / recommendation card -->
@@ -288,19 +298,32 @@
     <section id="screen-saved" class="screen hidden">
       <div class="screen__header">
         <h2>הסלים שלי</h2>
-        <p class="muted">שמור ושחזר את הסל הנוכחי בכל זמן.</p>
+        <p class="muted">שמור, טען ומחק סלים אישיים לפי המשתמש המחובר.</p>
+
+        <div class="screen-top-actions">
+          <button class="btn ghost" type="button" data-go-screen="basket">→ חזרה לבניית סל</button>
+        </div>
       </div>
 
-      <div class="card card--pad card--narrow">
+      <div id="savedLoginNotice" class="card card--pad card--narrow hidden">
+        <h3 class="card__title">צריך להתחבר כדי לראות סלים שמורים</h3>
+        <p class="muted">הסלים נשמרים לפי משתמש, לכן יש להתחבר או להירשם לפני שמירת סל.</p>
         <div class="actions">
-          <button class="btn primary" id="saveBasketBtn" type="button">💾 שמור סל נוכחי</button>
-          <button class="btn" id="loadBasketBtn" type="button">📂 טען סל שמור</button>
-          <button class="btn danger" id="clearSavedBtn" type="button">🗑️ מחק סל שמור</button>
+          <button class="btn primary" type="button" data-go-screen="auth-login">התחברות / הרשמה</button>
         </div>
-        <p id="savedStatus" class="muted" style="margin-top:12px;"></p>
-        <div class="actions" style="margin-top:16px;">
-          <button class="btn ghost" id="savedBackBtn" type="button">→ חזרה לבניית סל</button>
+      </div>
+
+      <div id="savedContent" class="card card--pad hidden">
+        <div class="card__head-row">
+          <div>
+            <h3 class="card__title">רשימת הסלים</h3>
+            <p class="muted">אפשר לפתוח כל סל, לראות את הפריטים, לטעון אותו או למחוק אותו.</p>
+          </div>
+          <button class="btn primary" id="saveCurrentBasketBtn" type="button">💾 שמור את הסל הנוכחי</button>
         </div>
+
+        <div id="savedStatus" class="muted" style="margin: 12px 0;"></div>
+        <div id="savedBasketsList" class="saved-baskets-list"></div>
       </div>
     </section>
 
@@ -374,9 +397,68 @@
 
   </main>
 
-  <footer class="footer">
-    <div class="container muted">© פורטל השוואת סל · פרויקט גמר אקדמי</div>
+  <footer class="site-footer">
+    <div class="site-footer__top">
+      <div class="container site-footer__grid">
+
+        <section class="site-footer__brand">
+          <div class="site-footer__logoRow">
+            <img src="./css/Logo-SAL.png" alt="לוגו הסל החכם" class="site-footer__logo">
+            <div>
+              <h3>הסל החכם</h3>
+              <p>השוואת סל פירות וירקות בצורה פשוטה, מהירה וחכמה.</p>
+            </div>
+          </div>
+
+          <p class="site-footer__text">
+            המערכת עוזרת להשוות בין חנויות לפי מחיר כולל, כיסוי סל, מינימום הזמנה ואזור משלוח.
+            אין רכישה באתר — המערכת מסייעת בקבלת החלטה.
+          </p>
+        </section>
+
+        <section class="site-footer__col">
+          <h4>ניווט מהיר</h4>
+          <button type="button" data-go-screen="basket">בניית סל</button>
+          <button type="button" data-go-screen="results">תוצאות השוואה</button>
+          <button type="button" data-go-screen="saved">הסלים שלי</button>
+          <button type="button" data-go-screen="about">איך זה עובד</button>
+        </section>
+
+        <section class="site-footer__col">
+          <h4>מה המערכת בודקת?</h4>
+          <ul>
+            <li>מחיר סל כולל משלוח</li>
+            <li>כמות מוצרים שנמצאו בחנות</li>
+            <li>מינימום הזמנה</li>
+            <li>חנויות שמבצעות משלוח לעיר שלך</li>
+          </ul>
+        </section>
+
+        <section class="site-footer__col site-footer__contact">
+          <h4>צור קשר</h4>
+          <p>יש שאלה או הצעה לשיפור?</p>
+          <a href="mailto:smartbasket@example.com">smartbasket@example.com</a>
+          <span>פרויקט גמר · 2026</span>
+
+          <div class="site-footer__socials" aria-label="קישורים חברתיים">
+            <a href="#" aria-label="WhatsApp">☎</a>
+            <a href="#" aria-label="Email">✉</a>
+            <a href="#" aria-label="Info">i</a>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="container site-footer__bottomInner">
+        <span>© 2026 הסל החכם. כל הזכויות שמורות.</span>
+        <span>מערכת להשוואת סל פירות וירקות · פרויקט גמר</span>
+      </div>
+    </div>
   </footer>
+
+  <button class="scroll-top-btn" type="button" data-scroll-top aria-label="חזרה לראש העמוד">↑</button>
 
   <script type="module" src="./js/app.js"></script>
 </body>
