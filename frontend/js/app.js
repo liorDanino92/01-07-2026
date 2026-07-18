@@ -1,4 +1,5 @@
 import { PRODUCTS } from "./data.js";
+import { CITIES } from "./cities.js";
 const API_BASE_URL = "https://01-07-2026-production.up.railway.app";
 
 const el = (id) => document.getElementById(id);
@@ -80,6 +81,16 @@ const rememberMe = el("rememberMe");
 const loginBtn = el("loginBtn");
 const goToRegisterBtn = el("goToRegisterBtn");
 const loginStatus = el("loginStatus");
+// === רשימת ערים ===
+const citiesList = el("citiesList");
+
+function renderCitiesList() {
+  if (!citiesList) return;
+
+  citiesList.innerHTML = CITIES
+    .map(city => `<option value="${city}"></option>`)
+    .join("");
+}
 // === Modal כללי ===
 const appModal = el("appModal");
 const modalIcon = el("modalIcon");
@@ -1484,6 +1495,7 @@ saveBasketFromBuilderBtn?.addEventListener("click", saveCurrentBasket);
 // אתחול
 // =================================================
 function init() {
+  renderCitiesList();
   renderProductOptions();
   renderBasket();
   updateNavCartCount();
