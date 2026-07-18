@@ -82,14 +82,74 @@ const loginBtn = el("loginBtn");
 const goToRegisterBtn = el("goToRegisterBtn");
 const loginStatus = el("loginStatus");
 // === רשימת ערים ===
-const citiesList = el("citiesList");
+// === השלמה אוטומטית לערים ===
+const authCitySuggestions = el("authCitySuggestions");
+const cityInputSuggestions = el("cityInputSuggestions");
 
-function renderCitiesList() {
-  if (!citiesList) return;
+function setupCityAutocomplete(input, suggestionsBox) {
+  if (!input || !suggestionsBox) return;
 
-  citiesList.innerHTML = CITIES
-    .map(city => `<option value="${city}"></option>`)
-    .join("");
+  function closeSuggestions() {
+    suggestionsBox.classList.add("hidden");
+    suggestionsBox.innerHTML = "";
+  }
+
+  function openSuggestions(matches) {
+    if (!matches.length) {
+      closeSuggestions();
+      return;
+    }
+
+    suggestionsBox.innerHTML = matches
+      .map(city => `<button type="button" class="city-suggestion-item">${city}</button>`)
+      .join("");
+
+    suggestionsBox.classList.remove("hidden");
+
+    suggestionsBox.querySelectorAll(".city-suggestion-item").forEach(btn => {
+      btn.addEventListener("click", () => {
+        input.value = btn.textContent;
+        closeSuggestions();
+        input.dispatchEvent(new Event("input"));
+      });
+    });
+  }
+
+  input.addEventListener("input", () => {
+    const value = input.value.trim();
+
+    if (!value) {
+      closeSuggestions();
+      return;
+    }
+
+    const matches = CITIES
+      .filter(city => city.startsWith(value))
+      .slice(0, 8);
+
+    openSuggestions(matches);
+  });
+
+  input.addEventListener("focus", () => {
+    const value = input.value.trim();
+
+    const matches = value
+      ? CITIES.filter(city => city.startsWith(value)).slice(0, 8)
+      : CITIES.slice(0, 8);
+
+    openSuggestions(matches);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!input.contains(event.target) && !suggestionsBox.contains(event.target)) {
+      closeSuggestions();
+    }
+  });
+}
+
+function initCityAutocomplete() {
+  setupCityAutocomplete(authCity, authCitySuggestions);
+  setupCityAutocomplete(cityInput, cityInputSuggestions);
 }
 // === Modal כללי ===
 const appModal = el("appModal");
@@ -1495,7 +1555,7 @@ saveBasketFromBuilderBtn?.addEventListener("click", saveCurrentBasket);
 // אתחול
 // =================================================
 function init() {
-  renderCitiesList();
+  initCityAutocomplete();
   renderProductOptions();
   renderBasket();
   updateNavCartCount();

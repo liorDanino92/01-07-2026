@@ -180,7 +180,8 @@
       <div class="card card--pad card--narrow">
         <div class="field">
           <label for="cityInput">ישוב / עיר</label>
-          <input id="cityInput" type="text" list="citiesList" placeholder="למשל: אשקלון" />
+          <input id="cityInput" type="text" placeholder="למשל: אשקלון" />
+          <div id="cityInputSuggestions" class="city-suggestions hidden"></div>
           <p id="cityError" class="field-error hidden">יש להזין עיר או יישוב כדי שנוכל למצוא חנויות שמבצעות משלוחים
             לאזור שלך.</p>
           <small class="hint">נשתמש בזה כדי לסנן חנויות שמשלחות לאזור שלך.</small>
@@ -354,7 +355,8 @@
           </div>
           <div class="field">
             <label for="authCity">עיר / ישוב</label>
-            <input id="authCity" type="text" list="citiesList" placeholder="בחר עיר" />
+            <input id="authCity" type="text" placeholder="בחר עיר" />
+            <div id="authCitySuggestions" class="city-suggestions hidden"></div>
           </div>
         </div>
 
@@ -486,7 +488,6 @@
       </div>
     </div>
   </div>
-  <datalist id="citiesList"></datalist>
   <script type="module" src="./js/app.js"></script>
 </body>
 
