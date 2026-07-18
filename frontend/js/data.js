@@ -1,6 +1,6 @@
 export const PRODUCTS = [
   // ירקות בסיסיים
-  { id: "tomato", name: "עגבנייה", unit: 'ק"ג', category: "ירקות" },
+  { id: "tomato", name: "עגבנייה", unit: 'ק"ג', category: "ירקות", approxUnits: "בערך 6–8 יח׳ לק״ג" },
   { id: "cucumber", name: "מלפפון", unit: 'ק"ג', category: "ירקות" },
   { id: "pepper", name: "פלפל אדום", unit: 'ק"ג', category: "ירקות" },
   { id: "green_pepper", name: "פלפל ירוק", unit: 'ק"ג', category: "ירקות" },
@@ -56,7 +56,7 @@ export const PRODUCTS = [
   { id: "apricot", name: "משמש", unit: 'ק"ג', category: "פירות" },
   { id: "grapes_green", name: "ענבים ירוקים", unit: 'ק"ג', category: "פירות" },
   { id: "grapes_red", name: "ענבים אדומים", unit: 'ק"ג', category: "פירות" },
-  { id: "watermelon", name: "אבטיח", unit: 'ק"ג', category: "פירות" },
+  { id: "watermelon", name: "אבטיח", unit: "יח'", category: "פירות" },
   { id: "melon", name: "מלון", unit: 'ק"ג', category: "פירות" },
   { id: "pineapple", name: "אננס", unit: "יח'", category: "פירות" },
   { id: "mango", name: "מנגו", unit: 'ק"ג', category: "פירות" },
