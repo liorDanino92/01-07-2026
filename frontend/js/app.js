@@ -224,6 +224,10 @@ document.querySelectorAll('.cartbtn[data-screen="basket"]').forEach(btn => {
   btn.addEventListener("click", () => showScreen(screenBasket));
 });
 
+document.querySelector(".brand")?.addEventListener("click", () => {
+  showScreen(screenBasket);
+});
+
 function showScreen(which) {
   const screens = [screenBasket, screenPrefs, screenResults, screenAbout, screenSaved, screenAuth, screenAuthLogin];
   for (const s of screens) s.classList.add("hidden");
@@ -307,6 +311,10 @@ function renderProductOptions() {
       <div class="quick-product__info">
         <b>${product.name}</b>
         <span class="muted">${product.category} · ${product.unit}</span>
+      </div>
+
+      <div class="quick-product__approx">
+        ${product.approxUnits ? product.approxUnits : ""}
       </div>
 
       <div class="quick-product__actions">
@@ -769,6 +777,28 @@ function getMissingNames(missing = []) {
 }
 
 function getBasketCoverageItems(storeResult) {
+  const breakdown = Array.isArray(storeResult.itemsBreakdown)
+    ? storeResult.itemsBreakdown
+    : [];
+
+  if (breakdown.length) {
+    return breakdown.map(item => {
+      const product = findProduct(item.productId);
+      const productName = product?.name ?? item.productId;
+      const unit = product?.unit ?? "";
+
+      return {
+        productId: item.productId,
+        name: productName,
+        qty: item.qty,
+        unit,
+        isMissing: !item.found,
+        pricePerUnit: item.pricePerUnit,
+        lineTotal: item.lineTotal
+      };
+    });
+  }
+
   const missingSet = new Set(storeResult.missing ?? []);
 
   return basket.map(item => {
@@ -782,7 +812,9 @@ function getBasketCoverageItems(storeResult) {
       name: productName,
       qty: item.qty,
       unit,
-      isMissing
+      isMissing,
+      pricePerUnit: null,
+      lineTotal: null
     };
   });
 }
@@ -809,6 +841,9 @@ function renderCoverageItemsList(storeResult, type = "all") {
           <span class="summary-coverage-item__icon">${item.isMissing ? "❌" : "✅"}</span>
           <span class="summary-coverage-item__name">${escapeHtml(item.name)}</span>
           <span class="summary-coverage-item__qty">${escapeHtml(item.qty)} ${escapeHtml(item.unit)}</span>
+          <span class="summary-coverage-item__price">
+            ${item.isMissing ? "אין מחיר" : `${formatPrice(item.pricePerUnit)} ל${escapeHtml(item.unit)}`}
+          </span>
           <span class="summary-coverage-item__status">${item.isMissing ? "חסר" : "נמצא"}</span>
         </li>
       `).join("")}
