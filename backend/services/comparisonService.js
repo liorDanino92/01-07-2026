@@ -1,5 +1,3 @@
-const { QUALITY_WEIGHT } = require("../data/mockData");
-
 function round2(n) {
   return Math.round((n + Number.EPSILON) * 100) / 100;
 }
@@ -11,15 +9,34 @@ function calculateComparisons(basketItems, stores) {
     let subtotal = 0;
     let found = 0;
     const missing = [];
+    const itemsBreakdown = [];
 
     for (const item of basketItems) {
       const pricePerUnit = store.prices[item.productId];
 
       if (typeof pricePerUnit === "number") {
+        const lineTotal = pricePerUnit * item.qty;
+
         found++;
-        subtotal += pricePerUnit * item.qty;
+        subtotal += lineTotal;
+
+        itemsBreakdown.push({
+          productId: item.productId,
+          qty: item.qty,
+          pricePerUnit: round2(pricePerUnit),
+          lineTotal: round2(lineTotal),
+          found: true
+        });
       } else {
         missing.push(item.productId);
+
+        itemsBreakdown.push({
+          productId: item.productId,
+          qty: item.qty,
+          pricePerUnit: null,
+          lineTotal: null,
+          found: false
+        });
       }
     }
 
@@ -28,8 +45,7 @@ function calculateComparisons(basketItems, stores) {
     return {
       storeId: store.id,
       storeName: store.name,
-      quality: store.quality,
-      qualityWeight: QUALITY_WEIGHT[store.quality] ?? 1,
+      website: store.website,
       coverageFound: found,
       coverageTotal: totalItems,
       coverageRatio: totalItems === 0 ? 0 : found / totalItems,
@@ -38,7 +54,8 @@ function calculateComparisons(basketItems, stores) {
       minOrder: store.minOrder,
       meetsMinOrder,
       totalWithDelivery: meetsMinOrder ? round2(subtotal + store.deliveryFee) : null,
-      missing
+      missing,
+      itemsBreakdown
     };
   });
 }
@@ -53,31 +70,22 @@ function pickRecommendation(results, mode) {
     };
   }
 
-  if (mode === "bestValue") {
-    const minPrice = Math.min(...list.map(r => r.totalWithDelivery ?? r.subtotal));
-    const maxPrice = Math.max(...list.map(r => r.totalWithDelivery ?? r.subtotal));
+  if (mode === "bestCoverage") {
+    list.sort((a, b) => {
+      if (a.coverageRatio !== b.coverageRatio) {
+        return b.coverageRatio - a.coverageRatio;
+      }
 
-    const norm = (p) => {
-      if (maxPrice === minPrice) return 1;
-      return 1 - (p - minPrice) / (maxPrice - minPrice);
-    };
+      const aPrice = a.totalWithDelivery ?? a.subtotal;
+      const bPrice = b.totalWithDelivery ?? b.subtotal;
 
-    const scored = list.map(r => {
-      const price = r.totalWithDelivery ?? r.subtotal;
-      const score =
-        r.coverageRatio * 0.5 +
-        (r.qualityWeight / 3) * 0.3 +
-        norm(price) * 0.2;
-
-      return { ...r, score };
+      return aPrice - bPrice;
     });
-
-    scored.sort((a, b) => b.score - a.score);
 
     return {
       type: "store",
-      storeId: scored[0].storeId,
-      label: "הכי משתלם"
+      storeId: list[0].storeId,
+      label: "כיסוי סל מקסימלי"
     };
   }
 
