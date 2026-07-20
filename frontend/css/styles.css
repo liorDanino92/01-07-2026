@@ -636,12 +636,15 @@ main.container {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 18px;
+  padding: 30px;
+  min-width: 300px;
+  min-height: 310px;
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 80px;
   transition: transform .15s ease, box-shadow .15s ease;
+  
 }
 
 .store-card:hover {
