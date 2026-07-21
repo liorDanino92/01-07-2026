@@ -27,7 +27,9 @@
         <button class="navlink" data-screen="results" type="button">תוצאות</button>
         <button class="navlink" data-screen="about" type="button">איך זה עובד</button>
         <button class="navlink" data-screen="saved" type="button">הסלים שלי</button>
-        <button class="navlink" data-screen="auth-login" type="button">התחברות</button>
+        <button class="navlink" data-screen="good-to-know" type="button">טוב לדעת</button>
+         <button class="navlink" data-screen="auth-login" type="button">התחברות</button>
+       
       </nav>
 
       <button class="cartbtn" data-screen="basket" type="button" aria-label="מעבר לבניית סל">
@@ -257,7 +259,151 @@
         <button id="backToPrefsBtn" class="btn ghost">→ חזרה להעדפות</button>
         <button id="backToBasketBtn2" class="btn">חזרה לעריכת סל</button>
       </div>
-    </section>
+    </section>  
+        <!-- ===== מסך טוב לדעת ===== -->
+<section id="screen-good-to-know" class="screen hidden">
+
+  <!-- כותרת ראשית -->
+  <div class="good-info-header">
+    <h2>טוב לדעת</h2>
+    <p>טיפים קטנים שיעזרו לכם לשמור על הפירות והירקות טריים, טעימים ובריאים יותר.</p>
+  </div>
+
+  <!-- שלושת הכרטיסים -->
+  <div class="good-info-grid">
+
+    <!-- כרטיס טיפים בריאותיים -->
+    <article class="good-info-card">
+
+      <div class="good-info-card__icon">
+        <img src="./images/health-icon.png" alt="טיפים בריאותיים">
+      </div>
+
+      <h3>טיפים בריאותיים</h3>
+
+      <div class="good-info-item">
+        <b>שלבו מגוון צבעים</b>
+        <span>שילוב של פירות וירקות בצבעים שונים תורם למגוון תזונתי.</span>
+      </div>
+
+      <div class="good-info-item">
+        <b>5 מנות ביום</b>
+        <span>מומלץ לשלב פירות וירקות כחלק מהתפריט היומי.</span>
+      </div>
+
+      <div class="good-info-item">
+        <b>העדיפו טרי</b>
+        <span>פירות וירקות טריים הם דרך מצוינת לגוון את הארוחות.</span>
+      </div>
+
+      <div class="good-info-item">
+        <b>אל תשכחו לשתות</b>
+        <span>שתיית מים במהלך היום מסייעת לשמירה על תחושת רעננות.</span>
+      </div>
+
+    </article>
+
+
+    <!-- כרטיס אחסון -->
+    <article class="good-info-card">
+
+      <div class="good-info-card__icon">
+        <img src="./images/storage-icon.png" alt="טיפים לאחסון">
+      </div>
+
+      <h3>טיפים לאחסון פירות וירקות</h3>
+
+      <div class="good-info-item">
+        <b>ירקות עליים</b>
+        <span>שמרו במקרר בכלי סגור או בשקית מתאימה לשמירה על הטריות.</span>
+      </div>
+
+      <div class="good-info-item">
+        <b>עגבניות</b>
+        <span>מומלץ לשמור בטמפרטורת החדר ולהרחיק מאור שמש ישיר.</span>
+      </div>
+
+      <div class="good-info-item">
+        <b>תפוחי אדמה ובצל</b>
+        <span>שמרו במקום חשוך, קריר ויבש ולא בתוך המקרר.</span>
+      </div>
+
+      <div class="good-info-item">
+        <b>הפרדה חכמה</b>
+        <span>פירות מסוימים מבשילים מהר יותר ולכן כדאי להפריד ביניהם.</span>
+      </div>
+
+    </article>
+
+
+    <!-- כרטיס חיי מדף -->
+    <article class="good-info-card">
+
+      <div class="good-info-card__icon">
+        <img src="./images/shelf-life-icon.png" alt="חיי מדף">
+      </div>
+
+      <h3>חיי מדף</h3>
+
+      <div class="shelf-life-row">
+        <b>ברוקולי</b>
+        <span>5–7 ימים</span>
+      </div>
+
+      <div class="shelf-life-row">
+        <b>מלפפון</b>
+        <span>7–10 ימים</span>
+      </div>
+
+      <div class="shelf-life-row">
+        <b>עגבנייה</b>
+        <span>5–7 ימים</span>
+      </div>
+
+      <div class="shelf-life-row">
+        <b>גזר</b>
+        <span>2–3 שבועות</span>
+      </div>
+
+      <div class="shelf-life-row">
+        <b>תפוח</b>
+        <span>2–4 שבועות</span>
+      </div>
+
+      <div class="shelf-life-row">
+        <b>תות שדה</b>
+        <span>3–5 ימים</span>
+      </div>
+
+    </article>
+
+  </div>
+
+
+  <!-- טיפ השבוע -->
+  <div class="weekly-tip">
+
+    <div class="weekly-tip__icon">
+      <img src="./images/tip-icon.png" alt="טיפ השבוע">
+    </div>
+
+    <div class="weekly-tip__text">
+      <h3>טיפ השבוע</h3>
+      <p>
+        שטפו פירות וירקות סמוך לצריכה ולא לפני האחסון —
+        לחות מיותרת עלולה לקצר את משך הטריות שלהם.
+      </p>
+    </div>
+
+    <img
+      src="./images/vegetables.png"
+      alt="ירקות טריים"
+      class="weekly-tip__vegetables"
+    >
+
+  </div>
+
+</section> 
 
     <!-- ===== Screen D: About ===== -->
     <section id="screen-about" class="screen hidden">

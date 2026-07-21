@@ -10,6 +10,7 @@ const screenPrefs = el("screen-prefs");
 const screenResults = el("screen-results");
 const screenAbout = el("screen-about");
 const screenSaved = el("screen-saved");
+const screenGoodToKnow = el("screen-good-to-know");
 const screenAuth = el("screen-auth");
 const screenAuthLogin = el("screen-auth-login");
 
@@ -282,6 +283,7 @@ navLinks.forEach(btn => {
     if (key === "results") return showScreen(screenResults);
     if (key === "about") return showScreen(screenAbout);
     if (key === "saved") return showScreen(screenSaved);
+    if (key === "good-to-know") return showScreen(screenGoodToKnow);
     if (key === "auth") return showScreen(screenAuth);
     if (key === "auth-login") {
       const user = getUser();
@@ -300,7 +302,17 @@ document.querySelector(".brand")?.addEventListener("click", () => {
 });
 
 function showScreen(which) {
-  const screens = [screenBasket, screenPrefs, screenResults, screenAbout, screenSaved, screenAuth, screenAuthLogin];
+  const screens = [
+    screenBasket,
+    screenPrefs,
+    screenResults,
+    screenAbout,
+    screenSaved,
+    screenGoodToKnow,
+    screenAuth,
+    screenAuthLogin
+  ];
+
   for (const s of screens) s.classList.add("hidden");
   which.classList.remove("hidden");
 
@@ -316,18 +328,26 @@ function showScreen(which) {
     [screenResults, "results"],
     [screenAbout, "about"],
     [screenSaved, "saved"],
+    [screenGoodToKnow, "good-to-know"],
     [screenAuth, "auth"],
     [screenPrefs, null],
     [screenAuthLogin, "auth-login"],
   ]);
+
   const activeKey = map.get(which);
+
   navLinks.forEach(btn => {
-    btn.classList.toggle("is-active", btn.dataset.screen === activeKey);
+    btn.classList.toggle(
+      "is-active",
+      btn.dataset.screen === activeKey
+    );
   });
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+ }
 // =================================================
 // בחירת מוצר + סינון לפי קטגוריה וחיפוש
 // =================================================
