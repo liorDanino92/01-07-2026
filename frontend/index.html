@@ -737,7 +737,11 @@
           </div>
           <div class="field">
             <label for="authPassword">סיסמה</label>
-            <input id="authPassword" type="password" placeholder="בחר סיסמה" />
+            <div class="password-field">
+              <input id="authPassword" type="password" placeholder="בחר סיסמה" />
+              <button class="password-toggle" type="button" data-password-toggle="authPassword"
+                aria-label="הצגת סיסמה">👁️</button>
+            </div>
           </div>
           <div class="field">
             <label for="authPhone">טלפון</label>
@@ -777,7 +781,11 @@
         </div>
         <div class="field">
           <label for="loginPassword">סיסמה</label>
-          <input id="loginPassword" type="password" placeholder="הזן סיסמה" />
+          <div class="password-field">
+            <input id="loginPassword" type="password" placeholder="הזן סיסמה" />
+            <button class="password-toggle" type="button" data-password-toggle="loginPassword"
+              aria-label="הצגת סיסמה">👁️</button>
+          </div>
         </div>
         <label class="rememberRow">
           <input id="rememberMe" type="checkbox" />

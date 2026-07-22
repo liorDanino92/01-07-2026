@@ -3364,16 +3364,16 @@ body.is-results-screen {
 .business-screen {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 16px;
 }
 
 .business-hero-card {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(280px, .8fr);
-  gap: 22px;
+  gap: 16px;
   align-items: stretch;
-  padding: 26px;
-  border-radius: 24px;
+  padding: 20px;
+  border-radius: 20px;
   border: 1px solid rgba(47, 156, 74, .18);
   background:
     radial-gradient(circle at top left, rgba(245, 124, 32, .16), transparent 34%),
@@ -3393,8 +3393,8 @@ body.is-results-screen {
 .business-hero-card__content p {
   margin: 0;
   color: var(--muted);
-  font-size: 17px;
-  line-height: 1.75;
+  font-size: 15px;
+  line-height: 1.6;
   max-width: 760px;
 }
 
@@ -3442,8 +3442,8 @@ body.is-results-screen {
 }
 
 .business-section {
-  padding: 22px;
-  border-radius: 22px;
+  padding: 16px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, .88);
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
@@ -3457,7 +3457,7 @@ body.is-results-screen {
 .business-section__head h3 {
   margin: 6px 0 6px;
   color: var(--green-700);
-  font-size: 26px;
+  font-size: 22px;
 }
 
 .business-section__head p {
@@ -3473,8 +3473,8 @@ body.is-results-screen {
 }
 
 .business-service-card {
-  padding: 18px;
-  border-radius: 18px;
+  padding: 14px;
+  border-radius: 15px;
   background: var(--surface);
   border: 1px solid var(--border);
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
@@ -3487,27 +3487,28 @@ body.is-results-screen {
 }
 
 .business-service-card__icon {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   display: grid;
   place-items: center;
-  border-radius: 14px;
+  border-radius: 11px;
   background: var(--green-50);
-  margin-bottom: 12px;
-  font-size: 22px;
+  margin-bottom: 8px;
+  font-size: 18px;
 }
 
 .business-service-card h4 {
   margin: 0 0 8px;
   color: var(--green-700);
-  font-size: 17px;
+  font-size: 15px;
+  margin-bottom: 6px;
 }
 
 .business-service-card p {
   margin: 0;
   color: var(--muted);
-  line-height: 1.6;
-  font-size: 14px;
+  line-height: 1.5;
+  font-size: 13px;
 }
 
 .business-strip {
@@ -3515,8 +3516,8 @@ body.is-results-screen {
   grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
   gap: 20px;
   align-items: center;
-  padding: 22px;
-  border-radius: 22px;
+  padding: 16px;
+  border-radius: 18px;
   background: linear-gradient(135deg, var(--green-700), var(--green-600));
   color: white;
   box-shadow: var(--shadow-lg);
@@ -3524,7 +3525,7 @@ body.is-results-screen {
 
 .business-strip h3 {
   margin: 6px 0 0;
-  font-size: 26px;
+  font-size: 22px;
 }
 
 .business-strip p {
@@ -3543,8 +3544,8 @@ body.is-results-screen {
 .business-price-card {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  border-radius: 20px;
+  padding: 16px;
+  border-radius: 16px;
   background: white;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
@@ -3575,7 +3576,7 @@ body.is-results-screen {
 }
 
 .business-price {
-  font-size: 34px;
+  font-size: 28px;
   font-weight: 800;
   color: var(--text);
   margin-bottom: 12px;
@@ -3612,8 +3613,8 @@ body.is-results-screen {
 }
 
 .business-steps article {
-  padding: 18px;
-  border-radius: 18px;
+  padding: 14px;
+  border-radius: 15px;
   background: white;
   border: 1px solid var(--border);
 }
@@ -3652,7 +3653,7 @@ body.is-results-screen {
 .business-contact-card h3 {
   margin: 6px 0 8px;
   color: var(--green-700);
-  font-size: 26px;
+  font-size: 22px;
 }
 
 .business-contact-card p {
@@ -3719,4 +3720,35 @@ body.is-results-screen {
   .business-strip {
     padding: 18px;
   }
+}
+
+/* ===== Password visibility toggle ===== */
+
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: 100%;
+  padding-inline-end: 46px;
+}
+
+.password-toggle {
+  position: absolute;
+  inset-inline-end: 8px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.password-toggle:hover {
+  background: var(--green-50);
 }

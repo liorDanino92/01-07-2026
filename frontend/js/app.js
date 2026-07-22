@@ -522,6 +522,7 @@ function renderProductOptions() {
 // =================================================
 function renderBasket() {
   basketTbody.innerHTML = "";
+  saveBasketToStorage();
 
   if (basket.length === 0) {
     basketEmpty.classList.remove("hidden");
@@ -1345,9 +1346,36 @@ function renderResults(results, rec, mode) {
 const STORAGE_KEY = "basket_v1";
 const USER_KEY = "user_v1";
 
-function saveUser(user) { localStorage.setItem(USER_KEY, JSON.stringify(user)); }
-function getUser() { return JSON.parse(localStorage.getItem(USER_KEY)); }
-function clearUser() { localStorage.removeItem(USER_KEY); }
+function saveUser(user, remember = true) {
+  const storage = remember ? localStorage : sessionStorage;
+
+  localStorage.removeItem(USER_KEY);
+  sessionStorage.removeItem(USER_KEY);
+
+  storage.setItem(USER_KEY, JSON.stringify(user));
+}
+
+function getUser() {
+  return JSON.parse(localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY));
+}
+
+function clearUser() {
+  localStorage.removeItem(USER_KEY);
+  sessionStorage.removeItem(USER_KEY);
+}
+
+function saveBasketToStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(basket));
+}
+
+function loadBasketFromStorage() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
 
 function renderAuthStatus() {
   const user = getUser();
@@ -1409,7 +1437,7 @@ loginBtn?.addEventListener("click", async () => {
       throw new Error(data.error || "שגיאה בהתחברות.");
     }
 
-    saveUser(data.user);
+    saveUser(data.user, Boolean(rememberMe?.checked));
 
     loginStatus.textContent = rememberMe?.checked
       ? "✅ התחברת והמשתמש ייזכר בדפדפן זה."
@@ -1468,7 +1496,7 @@ authSaveBtn?.addEventListener("click", async () => {
       throw new Error(data.error || "שגיאה בהרשמה.");
     }
 
-    saveUser(data.user);
+    saveUser(data.user, true);
 
     renderAuthStatus();
     authStatus.textContent = "✅ נרשמת בהצלחה.";
@@ -1771,6 +1799,20 @@ document.getElementById("businessForm")?.addEventListener("submit", async (event
   event.target.reset();
 });
 
+document.querySelectorAll("[data-password-toggle]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const inputId = btn.dataset.passwordToggle;
+    const input = document.getElementById(inputId);
+
+    if (!input) return;
+
+    const isPassword = input.type === "password";
+    input.type = isPassword ? "text" : "password";
+    btn.textContent = isPassword ? "🙈" : "👁️";
+    btn.setAttribute("aria-label", isPassword ? "הסתרת סיסמה" : "הצגת סיסמה");
+  });
+});
+
 async function loadProductsFromDb() {
   try {
     const response = await fetch(`${API_BASE_URL}/api/products`);
@@ -1795,6 +1837,7 @@ async function loadProductsFromDb() {
 async function init() {
   initCityAutocomplete();
   await loadProductsFromDb();
+  basket = loadBasketFromStorage();
   renderProductOptions();
   renderBasket();
   updateNavCartCount();
