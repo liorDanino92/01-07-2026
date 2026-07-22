@@ -7,6 +7,7 @@ const comparisonRoutes = require("./routes/comparisonRoutes");
 const aiBasketRoutes = require("./routes/aiBasketRoutes");
 const authRoutes = require("./routes/authRoutes");
 const basketRoutes = require("./routes/basketRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 
 const app = express();
@@ -22,6 +23,7 @@ app.use("/api", comparisonRoutes);
 app.use("/api", aiBasketRoutes);
 app.use("/api", authRoutes);
 app.use("/api", basketRoutes);
+app.use("/api", productRoutes);
 
 const PORT = process.env.PORT || 3000;
 

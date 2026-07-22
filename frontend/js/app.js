@@ -1,6 +1,7 @@
-import { PRODUCTS } from "./data.js";
+import { PRODUCTS as FALLBACK_PRODUCTS } from "./data.js";
 import { CITIES } from "./cities.js";
 const API_BASE_URL = "https://01-07-2026-production.up.railway.app";
+let PRODUCTS = FALLBACK_PRODUCTS;
 
 const el = (id) => document.getElementById(id);
 
@@ -347,7 +348,7 @@ function showScreen(which) {
     top: 0,
     behavior: "smooth"
   });
- }
+}
 // =================================================
 // בחירת מוצר + סינון לפי קטגוריה וחיפוש
 // =================================================
@@ -486,10 +487,18 @@ function removeItem(productId) {
   renderBasket();
 }
 
-function clearBasket() {
+async function clearBasket() {
   if (basket.length === 0) return;
 
-  const approved = confirm("לנקות את כל הסל?");
+  const approved = await openAppModal({
+    type: "danger",
+    icon: "🧺",
+    title: "ניקוי הסל",
+    text: "הפעולה תמחק את כל המוצרים מהסל הנוכחי. ניתן יהיה לבנות סל חדש לאחר מכן.",
+    confirmText: "נקה סל",
+    cancelText: "ביטול"
+  });
+
   if (!approved) return;
 
   basket = [];
@@ -790,7 +799,7 @@ document.querySelector("[data-scroll-top]")?.addEventListener("click", () => {
 calcBtn.addEventListener("click", async () => {
   const mode = document.querySelector('input[name="mode"]:checked')?.value ?? "cheapest";
   const user = getUser();
-  const city = user?.city?.trim() || cityInput?.value.trim() || "";
+  const city = cityInput?.value.trim() || user?.city?.trim() || "";
 
   if (!city) {
     cityInput?.classList.add("input-error");
@@ -818,18 +827,29 @@ calcBtn.addEventListener("click", async () => {
       })
     });
 
+    const data = await response.json().catch(() => ({}));
+
     if (!response.ok) {
-      throw new Error("שגיאה בקבלת תוצאות מהשרת");
+      throw new Error(data.error || "שגיאה בקבלת תוצאות מהשרת.");
     }
 
-    const data = await response.json();
+    renderResults(data.results, data.recommendation, mode);
+    showScreen(screenResults);
+
 
     renderResults(data.results, data.recommendation, mode);
     showScreen(screenResults);
 
   } catch (error) {
     console.error(error);
-    alert("אירעה שגיאה בחיבור לשרת. ודא שה-Backend פועל.");
+    await openAppModal({
+      type: "danger",
+      icon: "⚠️",
+      title: "שגיאה בחישוב ההשוואה",
+      text: error.message || "אירעה שגיאה בחיבור לשרת. נסה שוב בעוד רגע.",
+      confirmText: "הבנתי",
+      cancelText: ""
+    });
   } finally {
     calcBtn.disabled = false;
     calcBtn.textContent = "חשב תוצאות ←";
@@ -1571,15 +1591,35 @@ savedBackBtn?.addEventListener("click", () => showScreen(screenBasket));
 saveCurrentBasketBtn?.addEventListener("click", saveCurrentBasket);
 saveBasketFromBuilderBtn?.addEventListener("click", saveCurrentBasket);
 
+async function loadProductsFromDb() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/products`);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "שגיאה בטעינת מוצרים.");
+    }
+
+    if (Array.isArray(data.products) && data.products.length > 0) {
+      PRODUCTS = data.products;
+    }
+  } catch (error) {
+    console.warn("Using fallback products:", error.message);
+    PRODUCTS = FALLBACK_PRODUCTS;
+  }
+}
+
 // =================================================
 // אתחול
 // =================================================
-function init() {
+async function init() {
   initCityAutocomplete();
+  await loadProductsFromDb();
   renderProductOptions();
   renderBasket();
   updateNavCartCount();
   renderAuthStatus();
   showScreen(screenBasket);
 }
+
 init();
