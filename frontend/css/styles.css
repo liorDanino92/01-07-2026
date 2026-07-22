@@ -3356,3 +3356,367 @@ body.is-results-screen {
     height: 100px;
   }
 }
+
+/* ============================================================
+   Business screen - עמוד לבעלי עסקים
+   ============================================================ */
+
+.business-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.business-hero-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, .8fr);
+  gap: 22px;
+  align-items: stretch;
+  padding: 26px;
+  border-radius: 24px;
+  border: 1px solid rgba(47, 156, 74, .18);
+  background:
+    radial-gradient(circle at top left, rgba(245, 124, 32, .16), transparent 34%),
+    linear-gradient(135deg, rgba(240, 250, 242, .96), rgba(255, 255, 255, .96));
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.business-hero-card__content h2 {
+  margin: 8px 0 12px;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1.08;
+  color: var(--green-700);
+  max-width: 780px;
+}
+
+.business-hero-card__content p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.75;
+  max-width: 760px;
+}
+
+.business-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--orange-500);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: .02em;
+}
+
+.business-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.business-hero-card__side {
+  display: grid;
+  gap: 12px;
+}
+
+.business-mini-stat {
+  padding: 16px;
+  border-radius: 18px;
+  background: white;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.business-mini-stat b {
+  display: block;
+  color: var(--green-700);
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+.business-mini-stat span {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.business-section {
+  padding: 22px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.business-section__head {
+  max-width: 760px;
+  margin-bottom: 18px;
+}
+
+.business-section__head h3 {
+  margin: 6px 0 6px;
+  color: var(--green-700);
+  font-size: 26px;
+}
+
+.business-section__head p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.business-service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.business-service-card {
+  padding: 18px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.business-service-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--green-300);
+}
+
+.business-service-card__icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--green-50);
+  margin-bottom: 12px;
+  font-size: 22px;
+}
+
+.business-service-card h4 {
+  margin: 0 0 8px;
+  color: var(--green-700);
+  font-size: 17px;
+}
+
+.business-service-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.business-strip {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: 20px;
+  align-items: center;
+  padding: 22px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--green-700), var(--green-600));
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.business-strip h3 {
+  margin: 6px 0 0;
+  font-size: 26px;
+}
+
+.business-strip p {
+  margin: 0;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, .88);
+}
+
+.business-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.business-price-card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.business-price-card--featured {
+  border-color: var(--green-500);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-6px);
+  background:
+    linear-gradient(180deg, rgba(240, 250, 242, .98), white);
+}
+
+.business-plan-tag {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--green-50);
+  color: var(--green-700);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.business-price-card h4 {
+  margin: 14px 0 8px;
+  font-size: 20px;
+  color: var(--green-700);
+}
+
+.business-price {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.business-price small {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.business-price-card ul {
+  margin: 0 0 18px;
+  padding: 0 18px 0 0;
+  color: var(--muted);
+  line-height: 1.8;
+  flex: 1;
+}
+
+.business-note-card {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #fff8ef;
+  border: 1px solid rgba(245, 124, 32, .22);
+  color: #6f4b23;
+  line-height: 1.65;
+}
+
+.business-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.business-steps article {
+  padding: 18px;
+  border-radius: 18px;
+  background: white;
+  border: 1px solid var(--border);
+}
+
+.business-steps span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--green-600);
+  color: white;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.business-steps h4 {
+  margin: 0 0 8px;
+  color: var(--green-700);
+}
+
+.business-steps p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.business-contact-card {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.business-contact-card h3 {
+  margin: 6px 0 8px;
+  color: var(--green-700);
+  font-size: 26px;
+}
+
+.business-contact-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.business-form {
+  display: grid;
+  gap: 14px;
+}
+
+.business-form textarea {
+  min-height: 120px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  resize: vertical;
+  background: var(--surface-2);
+}
+
+.business-form textarea:focus {
+  outline: none;
+  border-color: var(--green-500);
+  box-shadow: 0 0 0 3px rgba(47, 156, 74, .15);
+  background: white;
+}
+
+@media (max-width: 980px) {
+
+  .business-hero-card,
+  .business-strip,
+  .business-contact-card {
+    grid-template-columns: 1fr;
+  }
+
+  .business-service-grid,
+  .business-pricing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .business-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .business-price-card--featured {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .business-hero-card {
+    padding: 18px;
+  }
+
+  .business-service-grid,
+  .business-pricing-grid,
+  .business-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .business-strip {
+    padding: 18px;
+  }
+}

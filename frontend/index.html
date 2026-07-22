@@ -28,8 +28,9 @@
         <button class="navlink" data-screen="about" type="button">איך זה עובד</button>
         <button class="navlink" data-screen="saved" type="button">הסלים שלי</button>
         <button class="navlink" data-screen="good-to-know" type="button">טוב לדעת</button>
-         <button class="navlink" data-screen="auth-login" type="button">התחברות</button>
-       
+        <button class="navlink" data-screen="auth-login" type="button">התחברות</button>
+        <button class="navlink" data-screen="business" type="button">לעסקים</button>
+
       </nav>
 
       <button class="cartbtn" data-screen="basket" type="button" aria-label="מעבר לבניית סל">
@@ -259,151 +260,398 @@
         <button id="backToPrefsBtn" class="btn ghost">→ חזרה להעדפות</button>
         <button id="backToBasketBtn2" class="btn">חזרה לעריכת סל</button>
       </div>
-    </section>  
-        <!-- ===== מסך טוב לדעת ===== -->
-<section id="screen-good-to-know" class="screen hidden">
+    </section>
+    <!-- ===== מסך טוב לדעת ===== -->
+    <section id="screen-good-to-know" class="screen hidden">
 
-  <!-- כותרת ראשית -->
-  <div class="good-info-header">
-    <h2>טוב לדעת</h2>
-    <p>טיפים קטנים שיעזרו לכם לשמור על הפירות והירקות טריים, טעימים ובריאים יותר.</p>
-  </div>
-
-  <!-- שלושת הכרטיסים -->
-  <div class="good-info-grid">
-
-    <!-- כרטיס טיפים בריאותיים -->
-    <article class="good-info-card">
-
-      <div class="good-info-card__icon">
-        <img src="./images/health-icon.png" alt="טיפים בריאותיים">
+      <!-- כותרת ראשית -->
+      <div class="good-info-header">
+        <h2>טוב לדעת</h2>
+        <p>טיפים קטנים שיעזרו לכם לשמור על הפירות והירקות טריים, טעימים ובריאים יותר.</p>
       </div>
 
-      <h3>טיפים בריאותיים</h3>
+      <!-- שלושת הכרטיסים -->
+      <div class="good-info-grid">
 
-      <div class="good-info-item">
-        <b>שלבו מגוון צבעים</b>
-        <span>שילוב של פירות וירקות בצבעים שונים תורם למגוון תזונתי.</span>
+        <!-- כרטיס טיפים בריאותיים -->
+        <article class="good-info-card">
+
+          <div class="good-info-card__icon">
+            <img src="./images/health-icon.png" alt="טיפים בריאותיים">
+          </div>
+
+          <h3>טיפים בריאותיים</h3>
+
+          <div class="good-info-item">
+            <b>שלבו מגוון צבעים</b>
+            <span>שילוב של פירות וירקות בצבעים שונים תורם למגוון תזונתי.</span>
+          </div>
+
+          <div class="good-info-item">
+            <b>5 מנות ביום</b>
+            <span>מומלץ לשלב פירות וירקות כחלק מהתפריט היומי.</span>
+          </div>
+
+          <div class="good-info-item">
+            <b>העדיפו טרי</b>
+            <span>פירות וירקות טריים הם דרך מצוינת לגוון את הארוחות.</span>
+          </div>
+
+          <div class="good-info-item">
+            <b>אל תשכחו לשתות</b>
+            <span>שתיית מים במהלך היום מסייעת לשמירה על תחושת רעננות.</span>
+          </div>
+
+        </article>
+
+
+        <!-- כרטיס אחסון -->
+        <article class="good-info-card">
+
+          <div class="good-info-card__icon">
+            <img src="./images/storage-icon.png" alt="טיפים לאחסון">
+          </div>
+
+          <h3>טיפים לאחסון פירות וירקות</h3>
+
+          <div class="good-info-item">
+            <b>ירקות עליים</b>
+            <span>שמרו במקרר בכלי סגור או בשקית מתאימה לשמירה על הטריות.</span>
+          </div>
+
+          <div class="good-info-item">
+            <b>עגבניות</b>
+            <span>מומלץ לשמור בטמפרטורת החדר ולהרחיק מאור שמש ישיר.</span>
+          </div>
+
+          <div class="good-info-item">
+            <b>תפוחי אדמה ובצל</b>
+            <span>שמרו במקום חשוך, קריר ויבש ולא בתוך המקרר.</span>
+          </div>
+
+          <div class="good-info-item">
+            <b>הפרדה חכמה</b>
+            <span>פירות מסוימים מבשילים מהר יותר ולכן כדאי להפריד ביניהם.</span>
+          </div>
+
+        </article>
+
+
+        <!-- כרטיס חיי מדף -->
+        <article class="good-info-card">
+
+          <div class="good-info-card__icon">
+            <img src="./images/shelf-life-icon.png" alt="חיי מדף">
+          </div>
+
+          <h3>חיי מדף</h3>
+
+          <div class="shelf-life-row">
+            <b>ברוקולי</b>
+            <span>5–7 ימים</span>
+          </div>
+
+          <div class="shelf-life-row">
+            <b>מלפפון</b>
+            <span>7–10 ימים</span>
+          </div>
+
+          <div class="shelf-life-row">
+            <b>עגבנייה</b>
+            <span>5–7 ימים</span>
+          </div>
+
+          <div class="shelf-life-row">
+            <b>גזר</b>
+            <span>2–3 שבועות</span>
+          </div>
+
+          <div class="shelf-life-row">
+            <b>תפוח</b>
+            <span>2–4 שבועות</span>
+          </div>
+
+          <div class="shelf-life-row">
+            <b>תות שדה</b>
+            <span>3–5 ימים</span>
+          </div>
+
+        </article>
+
       </div>
 
-      <div class="good-info-item">
-        <b>5 מנות ביום</b>
-        <span>מומלץ לשלב פירות וירקות כחלק מהתפריט היומי.</span>
+
+      <!-- טיפ השבוע -->
+      <div class="weekly-tip">
+
+        <div class="weekly-tip__icon">
+          <img src="./images/tip-icon.png" alt="טיפ השבוע">
+        </div>
+
+        <div class="weekly-tip__text">
+          <h3>טיפ השבוע</h3>
+          <p>
+            שטפו פירות וירקות סמוך לצריכה ולא לפני האחסון —
+            לחות מיותרת עלולה לקצר את משך הטריות שלהם.
+          </p>
+        </div>
+
+        <img src="./images/vegetables.png" alt="ירקות טריים" class="weekly-tip__vegetables">
+
       </div>
 
-      <div class="good-info-item">
-        <b>העדיפו טרי</b>
-        <span>פירות וירקות טריים הם דרך מצוינת לגוון את הארוחות.</span>
+    </section>
+
+    <!-- ===== Screen Business ===== -->
+    <section id="screen-business" class="screen hidden business-screen">
+
+      <div class="business-hero-card">
+        <div class="business-hero-card__content">
+          <span class="business-eyebrow">לבעלי חנויות · ירקניות · משקים · חנויות אונליין</span>
+
+          <h2>הופכים את החנות שלכם לבחירה חכמה בסל של הלקוח</h2>
+
+          <p>
+            הצטרפו ל"הסל החכם" וקבלו חשיפה ממוקדת בדיוק ברגע שבו לקוח בונה סל,
+            משווה מחירים ומחפש חנות אמינה שמתאימה לאזור שלו.
+          </p>
+
+          <div class="business-hero-actions">
+            <button class="btn primary" type="button" data-business-scroll="contact">אני רוצה להצטרף</button>
+            <button class="btn ghost" type="button" data-business-scroll="pricing">צפייה במחירים</button>
+          </div>
+        </div>
+
+        <div class="business-hero-card__side">
+          <div class="business-mini-stat">
+            <b>לקוחות עם כוונה</b>
+            <span>המשתמש כבר בנה סל ומחפש איפה להזמין.</span>
+          </div>
+
+          <div class="business-mini-stat">
+            <b>מידע אחיד וברור</b>
+            <span>מחירים, אזורי משלוח, מינימום הזמנה וכיסוי סל במקום אחד.</span>
+          </div>
+
+          <div class="business-mini-stat">
+            <b>בלי רכישה באתר</b>
+            <span>אנחנו מציגים ומפנים — ההזמנה נשארת אצל החנות.</span>
+          </div>
+        </div>
       </div>
 
-      <div class="good-info-item">
-        <b>אל תשכחו לשתות</b>
-        <span>שתיית מים במהלך היום מסייעת לשמירה על תחושת רעננות.</span>
+      <div class="business-section">
+        <div class="business-section__head">
+          <span class="business-eyebrow">מה אנחנו מציעים?</span>
+          <h3>שירותים לבעלי עסקים</h3>
+          <p>
+            שירותים שמתאימים לעסקים בתחום הפירות והירקות — עם דגש על חשיפה,
+            שקיפות וניהול נתונים פשוט.
+          </p>
+        </div>
+
+        <div class="business-service-grid">
+
+          <article class="business-service-card">
+            <div class="business-service-card__icon">🛒</div>
+            <h4>הופעה בתוצאות ההשוואה</h4>
+            <p>החנות תופיע כאשר הסל של המשתמש מתאים למוצרים, לאזורי המשלוח ולתנאי ההזמנה שלכם.</p>
+          </article>
+
+          <article class="business-service-card">
+            <div class="business-service-card__icon">📍</div>
+            <h4>התאמה לפי אזור משלוח</h4>
+            <p>המערכת מציגה את החנות רק ללקוחות שנמצאים באזורים שאתם משרתים.</p>
+          </article>
+
+          <article class="business-service-card">
+            <div class="business-service-card__icon">📦</div>
+            <h4>ניהול מוצרים ומחירים</h4>
+            <p>עדכון מוצרים, מחירים, מינימום הזמנה ודמי משלוח באמצעות קובץ נתונים או חיבור עתידי.</p>
+          </article>
+
+          <article class="business-service-card">
+            <div class="business-service-card__icon">📊</div>
+            <h4>דוח ביקושים חודשי</h4>
+            <p>תובנות על מוצרים מבוקשים, סלים נפוצים ואזורים שבהם משתמשים מחפשים חנויות.</p>
+          </article>
+
+          <article class="business-service-card">
+            <div class="business-service-card__icon">🏷️</div>
+            <h4>הבלטת מבצעים</h4>
+            <p>אפשר להציג מוצרים עונתיים, מבצעי משלוח או יתרון איכותי שמבדל את החנות.</p>
+          </article>
+
+          <article class="business-service-card">
+            <div class="business-service-card__icon">🤝</div>
+            <h4>הפניה לאתר החנות</h4>
+            <p>הלקוח מקבל החלטה אצלנו וממשיך אליכם להשלמת ההזמנה.</p>
+          </article>
+
+        </div>
       </div>
 
-    </article>
+      <div class="business-strip">
+        <div>
+          <span class="business-eyebrow">למה זה שונה מפרסום רגיל?</span>
+          <h3>לא עוד מודעה כללית — אלא חשיפה בזמן החלטת קנייה</h3>
+        </div>
 
-
-    <!-- כרטיס אחסון -->
-    <article class="good-info-card">
-
-      <div class="good-info-card__icon">
-        <img src="./images/storage-icon.png" alt="טיפים לאחסון">
+        <p>
+          במקום לשלם על קליקים כלליים, החנות מופיעה בסביבה שבה המשתמש כבר בחר מוצרים,
+          הזין עיר ומבקש המלצה מבוססת נתונים.
+        </p>
       </div>
 
-      <h3>טיפים לאחסון פירות וירקות</h3>
+      <div class="business-section" id="businessPricing">
+        <div class="business-section__head">
+          <span class="business-eyebrow">תמחור מוצע לפיילוט</span>
+          <h3>חבילות הצטרפות</h3>
+          <p>
+            המחירים נבנו כך שיתאימו לעסקים קטנים ובינוניים, ויהיו נמוכים משמעותית
+            מניהול קמפיינים דיגיטליים מלאים.
+          </p>
+        </div>
 
-      <div class="good-info-item">
-        <b>ירקות עליים</b>
-        <span>שמרו במקרר בכלי סגור או בשקית מתאימה לשמירה על הטריות.</span>
+        <div class="business-pricing-grid">
+
+          <article class="business-price-card">
+            <span class="business-plan-tag">בסיס</span>
+            <h4>נראות בחיפוש</h4>
+            <div class="business-price">₪99 <small>/ חודש</small></div>
+
+            <ul>
+              <li>כרטיס חנות בסיסי</li>
+              <li>הופעה בתוצאות השוואה</li>
+              <li>עדכון מחירים חודשי</li>
+              <li>קישור לאתר או WhatsApp</li>
+            </ul>
+
+            <button class="btn" type="button" data-business-scroll="contact">בחירת חבילה</button>
+          </article>
+
+          <article class="business-price-card business-price-card--featured">
+            <span class="business-plan-tag">מומלץ</span>
+            <h4>צמיחה חכמה</h4>
+            <div class="business-price">₪249 <small>/ חודש</small></div>
+
+            <ul>
+              <li>כל מה שבחבילת בסיס</li>
+              <li>עדכון מחירים עד 4 פעמים בחודש</li>
+              <li>הבלטת חנות בתוצאות מתאימות</li>
+              <li>דוח ביקושים חודשי</li>
+              <li>סימון מבצעים ומוצרים עונתיים</li>
+            </ul>
+
+            <button class="btn primary" type="button" data-business-scroll="contact">אני רוצה להצטרף</button>
+          </article>
+
+          <article class="business-price-card">
+            <span class="business-plan-tag">פרימיום</span>
+            <h4>שותף נתונים</h4>
+            <div class="business-price">₪499 <small>/ חודש</small></div>
+
+            <ul>
+              <li>כל מה שבחבילת צמיחה</li>
+              <li>עדכוני נתונים שבועיים</li>
+              <li>תצוגת זמינות מוצרים מתקדמת</li>
+              <li>תובנות לפי אזורי משלוח</li>
+              <li>הכנה לחיבור API עתידי</li>
+            </ul>
+
+            <button class="btn" type="button" data-business-scroll="contact">דברו איתי</button>
+          </article>
+
+        </div>
+
+        <div class="business-note-card">
+          <b>דמי הקמה מוצעים:</b>
+          ₪290 חד־פעמי להזנת חנות, אזורי משלוח, מוצרים ראשונים ובדיקת תקינות.
+          בתקופת פיילוט אפשר להציע חודש ראשון ללא התחייבות.
+        </div>
       </div>
 
-      <div class="good-info-item">
-        <b>עגבניות</b>
-        <span>מומלץ לשמור בטמפרטורת החדר ולהרחיק מאור שמש ישיר.</span>
+      <div class="business-section">
+        <div class="business-section__head">
+          <span class="business-eyebrow">איך מתחילים?</span>
+          <h3>תהליך הצטרפות פשוט</h3>
+        </div>
+
+        <div class="business-steps">
+          <article>
+            <span>1</span>
+            <h4>שיחת התאמה קצרה</h4>
+            <p>מבינים את סוג החנות, אזורי המשלוח והמוצרים המרכזיים.</p>
+          </article>
+
+          <article>
+            <span>2</span>
+            <h4>העלאת נתוני מוצרים</h4>
+            <p>מקבלים קובץ מסודר או מזינים ידנית מוצרים, מחירים ותנאי משלוח.</p>
+          </article>
+
+          <article>
+            <span>3</span>
+            <h4>בדיקה במערכת</h4>
+            <p>מוודאים שהחנות מופיעה רק בתוצאות רלוונטיות ושכל המחירים תקינים.</p>
+          </article>
+
+          <article>
+            <span>4</span>
+            <h4>עלייה לאוויר</h4>
+            <p>החנות מתחילה לקבל חשיפה ממוקדת מתוך תוצאות ההשוואה.</p>
+          </article>
+        </div>
       </div>
 
-      <div class="good-info-item">
-        <b>תפוחי אדמה ובצל</b>
-        <span>שמרו במקום חשוך, קריר ויבש ולא בתוך המקרר.</span>
+      <div class="business-section" id="businessContact">
+        <div class="business-contact-card">
+          <div>
+            <span class="business-eyebrow">השאירו פרטים</span>
+            <h3>רוצים שהחנות שלכם תופיע בהסל החכם?</h3>
+            <p>
+              מלאו פרטים בסיסיים ונחזור אליכם עם הסבר על התאמה,
+              מחירים ודרך העברת הנתונים.
+            </p>
+          </div>
+
+          <form id="businessForm" class="business-form">
+            <div class="grid grid--2">
+              <div class="field">
+                <label for="businessName">שם העסק</label>
+                <input id="businessName" type="text" placeholder="לדוגמה: ירקניית השדה" required>
+              </div>
+
+              <div class="field">
+                <label for="businessArea">אזור פעילות</label>
+                <input id="businessArea" type="text" placeholder="לדוגמה: רחובות והסביבה" required>
+              </div>
+
+              <div class="field">
+                <label for="businessPhone">טלפון</label>
+                <input id="businessPhone" type="tel" placeholder="050-0000000" required>
+              </div>
+
+              <div class="field">
+                <label for="businessEmail">אימייל</label>
+                <input id="businessEmail" type="email" placeholder="name@example.com" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="businessNotes">מה חשוב לדעת?</label>
+              <textarea id="businessNotes" rows="4"
+                placeholder="ספרו בקצרה על סוג החנות, אתר קיים, אזורי משלוח או דרך עדכון מחירים"></textarea>
+            </div>
+
+            <button class="btn primary" type="submit">שליחת פנייה</button>
+            <small class="hint">בשלב הזה הפנייה מוצגת כהדגמה. בהמשך אפשר לחבר אותה ל־Backend ולשמור במסד
+              הנתונים.</small>
+          </form>
+        </div>
       </div>
 
-      <div class="good-info-item">
-        <b>הפרדה חכמה</b>
-        <span>פירות מסוימים מבשילים מהר יותר ולכן כדאי להפריד ביניהם.</span>
-      </div>
-
-    </article>
-
-
-    <!-- כרטיס חיי מדף -->
-    <article class="good-info-card">
-
-      <div class="good-info-card__icon">
-        <img src="./images/shelf-life-icon.png" alt="חיי מדף">
-      </div>
-
-      <h3>חיי מדף</h3>
-
-      <div class="shelf-life-row">
-        <b>ברוקולי</b>
-        <span>5–7 ימים</span>
-      </div>
-
-      <div class="shelf-life-row">
-        <b>מלפפון</b>
-        <span>7–10 ימים</span>
-      </div>
-
-      <div class="shelf-life-row">
-        <b>עגבנייה</b>
-        <span>5–7 ימים</span>
-      </div>
-
-      <div class="shelf-life-row">
-        <b>גזר</b>
-        <span>2–3 שבועות</span>
-      </div>
-
-      <div class="shelf-life-row">
-        <b>תפוח</b>
-        <span>2–4 שבועות</span>
-      </div>
-
-      <div class="shelf-life-row">
-        <b>תות שדה</b>
-        <span>3–5 ימים</span>
-      </div>
-
-    </article>
-
-  </div>
-
-
-  <!-- טיפ השבוע -->
-  <div class="weekly-tip">
-
-    <div class="weekly-tip__icon">
-      <img src="./images/tip-icon.png" alt="טיפ השבוע">
-    </div>
-
-    <div class="weekly-tip__text">
-      <h3>טיפ השבוע</h3>
-      <p>
-        שטפו פירות וירקות סמוך לצריכה ולא לפני האחסון —
-        לחות מיותרת עלולה לקצר את משך הטריות שלהם.
-      </p>
-    </div>
-
-    <img
-      src="./images/vegetables.png"
-      alt="ירקות טריים"
-      class="weekly-tip__vegetables"
-    >
-
-  </div>
-
-</section> 
+    </section>
 
     <!-- ===== Screen D: About ===== -->
     <section id="screen-about" class="screen hidden">

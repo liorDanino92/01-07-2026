@@ -14,6 +14,7 @@ const screenSaved = el("screen-saved");
 const screenGoodToKnow = el("screen-good-to-know");
 const screenAuth = el("screen-auth");
 const screenAuthLogin = el("screen-auth-login");
+const screenBusiness = el("screen-business");
 
 // === ניווט ===
 const navLinks = Array.from(document.querySelectorAll(".navlink"));
@@ -285,6 +286,7 @@ navLinks.forEach(btn => {
     if (key === "about") return showScreen(screenAbout);
     if (key === "saved") return showScreen(screenSaved);
     if (key === "good-to-know") return showScreen(screenGoodToKnow);
+    if (key === "business") return showScreen(screenBusiness);
     if (key === "auth") return showScreen(screenAuth);
     if (key === "auth-login") {
       const user = getUser();
@@ -311,7 +313,8 @@ function showScreen(which) {
     screenSaved,
     screenGoodToKnow,
     screenAuth,
-    screenAuthLogin
+    screenAuthLogin,
+    screenBusiness
   ];
 
   for (const s of screens) s.classList.add("hidden");
@@ -333,6 +336,7 @@ function showScreen(which) {
     [screenAuth, "auth"],
     [screenPrefs, null],
     [screenAuthLogin, "auth-login"],
+    [screenBusiness, "business"]
   ]);
 
   const activeKey = map.get(which);
@@ -1608,6 +1612,40 @@ aboutBackBtn?.addEventListener("click", () => showScreen(screenBasket));
 savedBackBtn?.addEventListener("click", () => showScreen(screenBasket));
 saveCurrentBasketBtn?.addEventListener("click", saveCurrentBasket);
 saveBasketFromBuilderBtn?.addEventListener("click", saveCurrentBasket);
+
+document.querySelectorAll("[data-business-scroll]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = btn.dataset.businessScroll;
+
+    if (target === "pricing") {
+      document.getElementById("businessPricing")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    if (target === "contact") {
+      document.getElementById("businessContact")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  });
+});
+
+document.getElementById("businessForm")?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  await openAppModal({
+    icon: "🤝",
+    title: "הפנייה נקלטה",
+    text: "בגרסת ההדגמה הפנייה לא נשלחת עדיין לשרת. בשלב הבא ניתן לחבר את הטופס ל-Backend ולשמור פניות של בעלי עסקים במסד הנתונים.",
+    confirmText: "הבנתי",
+    cancelText: "ביטול"
+  });
+
+  event.target.reset();
+});
 
 async function loadProductsFromDb() {
   try {
