@@ -837,9 +837,6 @@ calcBtn.addEventListener("click", async () => {
     showScreen(screenResults);
 
 
-    renderResults(data.results, data.recommendation, mode);
-    showScreen(screenResults);
-
   } catch (error) {
     console.error(error);
     await openAppModal({
@@ -1502,7 +1499,14 @@ async function saveCurrentBasket() {
   if (!user) return;
 
   if (!basket.length) {
-    alert("לא ניתן לשמור סל ריק.");
+    await openAppModal({
+      type: "danger",
+      icon: "🧺",
+      title: "שמירת סל",
+      text: "לא ניתן לשמור סל ריק. הוסף לפחות מוצר אחד לסל ואז נסה שוב.",
+      confirmText: "הבנתי",
+      cancelText: "ביטול"
+    });
     return;
   }
 
@@ -1549,7 +1553,14 @@ async function saveCurrentBasket() {
     if (savedStatus) savedStatus.textContent = `✅ הסל "${data.basket.name}" נשמר.`;
     await fetchSavedBaskets();
   } catch (error) {
-    alert(error.message || "שגיאה בשמירת הסל.");
+    await openAppModal({
+      type: "danger",
+      icon: "⚠️",
+      title: "שגיאה בשמירת הסל",
+      text: error.message || "שגיאה בשמירת הסל.",
+      confirmText: "הבנתי",
+      cancelText: "ביטול"
+    });
   }
 }
 
@@ -1582,7 +1593,14 @@ async function deleteSavedBasket(basketId) {
     if (savedStatus) savedStatus.textContent = "🗑️ הסל נמחק.";
     await fetchSavedBaskets();
   } catch (error) {
-    alert(error.message || "שגיאה במחיקת הסל.");
+    await openAppModal({
+      type: "danger",
+      icon: "⚠️",
+      title: "שגיאה במחיקת הסל",
+      text: error.message || "שגיאה במחיקת הסל.",
+      confirmText: "הבנתי",
+      cancelText: "ביטול"
+    });
   }
 }
 
