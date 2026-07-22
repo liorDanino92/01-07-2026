@@ -1,7 +1,98 @@
 import { PRODUCTS as FALLBACK_PRODUCTS } from "./data.js";
 import { CITIES } from "./cities.js";
 const API_BASE_URL = "https://01-07-2026-production.up.railway.app";
-let PRODUCTS = FALLBACK_PRODUCTS;
+const PRODUCT_APPROX_UNITS = {
+  tomato: "בערך 6–8 יח׳ לק״ג",
+  cucumber: "בערך 3–4 יח׳ לק״ג",
+  pepper: "בערך 5–7 יח׳ לק״ג",
+  green_pepper: "בערך 5–7 יח׳ לק״ג",
+  yellow_pepper: "בערך 5–7 יח׳ לק״ג",
+  hot_pepper: "בערך 25–35 יח׳ לק״ג",
+  onion: "בערך 5–7 יח׳ לק״ג",
+  red_onion: "בערך 5–7 יח׳ לק״ג",
+  potato: "בערך 6–8 יח׳ לק״ג",
+  sweet_potato: "בערך 4–6 יח׳ לק״ג",
+  carrot: "בערך 8–12 יח׳ לק״ג",
+  zucchini: "בערך 5–7 יח׳ לק״ג",
+  eggplant: "בערך 2–3 יח׳ לק״ג",
+  cabbage: "ראש בינוני בערך 1–2 ק״ג",
+  red_cabbage: "ראש בינוני בערך 0.8–1.5 ק״ג",
+  cauliflower: "יחידה בינונית בערך 0.7–1.2 ק״ג",
+  broccoli: "יחידה בינונית בערך 400–700 גרם",
+  pumpkin: "נמכר לפי משקל — חתיכה משתנה לפי חיתוך",
+  beet: "בערך 6–8 יח׳ לק״ג",
+  radish: "בערך 25–35 יח׳ לק״ג",
+  corn: "קלח בינוני בערך 250–350 גרם",
+  garlic: "בערך 25–35 ראשים קטנים לק״ג",
+  ginger: "נמכר לפי משקל — גודל השורש משתנה",
+
+  lettuce: "ראש בינוני בערך 300–500 גרם",
+  romaine_lettuce: "יחידה בינונית בערך 300–600 גרם",
+  iceberg_lettuce: "ראש בינוני בערך 500–800 גרם",
+  spinach: "צרור/מארז בערך 200–300 גרם",
+  mangold: "צרור בערך 300–500 גרם",
+  kale: "צרור בערך 200–300 גרם",
+  arugula: "צרור/מארז בערך 100–200 גרם",
+  parsley: "צרור בערך 80–120 גרם",
+  cilantro: "צרור בערך 80–120 גרם",
+  dill: "צרור בערך 80–120 גרם",
+  mint: "צרור בערך 80–120 גרם",
+  basil: "צרור בערך 80–120 גרם",
+  green_onion: "צרור בערך 100–150 גרם",
+  leek: "יחידה בינונית בערך 200–300 גרם",
+  celery: "ראש/צרור בערך 600–900 גרם",
+
+  apple: "בערך 5–6 יח׳ לק״ג",
+  green_apple: "בערך 5–6 יח׳ לק״ג",
+  banana: "בערך 6–8 יח׳ לק״ג",
+  orange: "בערך 6–8 יח׳ לק״ג",
+  lemon: "בערך 10–14 יח׳ לק״ג",
+  mandarin: "בערך 10–14 יח׳ לק״ג",
+  grapefruit: "בערך 3–4 יח׳ לק״ג",
+  pear: "בערך 5–7 יח׳ לק״ג",
+  peach: "בערך 6–8 יח׳ לק״ג",
+  nectarine: "בערך 6–8 יח׳ לק״ג",
+  plum: "בערך 10–14 יח׳ לק״ג",
+  apricot: "בערך 18–25 יח׳ לק״ג",
+  grapes_green: "בערך 2–4 אשכולות לק״ג",
+  grapes_red: "בערך 2–4 אשכולות לק״ג",
+  watermelon: "אבטיח בינוני בערך 5–8 ק״ג",
+  melon: "מלון בינוני בערך 1.2–2 ק״ג",
+  pineapple: "אננס בינוני בערך 1–1.8 ק״ג",
+  mango: "בערך 3–5 יח׳ לק״ג",
+  kiwi: "בערך 8–12 יח׳ לק״ג",
+  strawberry: "בערך 35–45 יח׳ לק״ג",
+  blueberry: "מארז נפוץ בערך 125–250 גרם",
+  raspberry: "מארז נפוץ בערך 125–250 גרם",
+  cherry: "בערך 80–120 יח׳ לק״ג",
+  pomegranate: "בערך 3–5 יח׳ לק״ג",
+  persimmon: "בערך 5–7 יח׳ לק״ג",
+  avocado: "בערך 4–6 יח׳ לק״ג",
+  dates: "בערך 45–65 יח׳ לק״ג",
+  fig: "בערך 18–25 יח׳ לק״ג",
+  loquat: "בערך 25–35 יח׳ לק״ג",
+
+  mushrooms: "מארז נפוץ בערך 250 גרם",
+  portobello: "מארז נפוץ בערך 250–400 גרם",
+  sprouts: "מארז נפוץ בערך 100–200 גרם",
+  bean_sprouts: "מארז נפוץ בערך 300–400 גרם",
+  baby_carrot: "מארז נפוץ בערך 350 גרם",
+  cherry_tomato: "מארז נפוץ בערך 250–500 גרם",
+  cucumber_baby: "מארז נפוץ בערך 400–500 גרם",
+  mini_pepper: "מארז נפוץ בערך 250–400 גרם",
+  edamame: "שקית נפוצה בערך 400–500 גרם",
+  asparagus: "צרור בערך 250–400 גרם",
+  artichoke: "יחידה בינונית בערך 250–400 גרם"
+};
+
+function enrichProductsWithApproxUnits(products) {
+  return products.map(product => ({
+    ...product,
+    approxUnits: product.approxUnits || PRODUCT_APPROX_UNITS[product.id] || ""
+  }));
+}
+
+let PRODUCTS = enrichProductsWithApproxUnits(FALLBACK_PRODUCTS);
 
 const el = (id) => document.getElementById(id);
 
@@ -997,6 +1088,31 @@ function recommendationReason(store, modeLabel) {
   return parts.join(" · ");
 }
 
+async function openStoreWithPrivacyConsent(storeName, website) {
+  if (!website || website === "#") {
+    await openAppModal({
+      icon: "🏪",
+      title: "אין קישור זמין",
+      text: "לחנות הזאת עדיין לא הוגדר קישור לאתר חיצוני.",
+      confirmText: "הבנתי",
+      cancelText: "ביטול"
+    });
+    return;
+  }
+
+  const approved = await openAppModal({
+    icon: "🔐",
+    title: "אישור מעבר ומסירת פרטים",
+    text: `אתה עומד לעבור לאתר של ${storeName}. לצורך השלמת הזמנה, החנות עשויה לקבל פרטים אישיים שתמסור לה, כמו שם, טלפון, אימייל, עיר ופרטי הסל. המשך רק אם אתה מאשר זאת.`,
+    confirmText: "מאשר וממשיך",
+    cancelText: "ביטול"
+  });
+
+  if (!approved) return;
+
+  window.open(website, "_blank", "noopener,noreferrer");
+}
+
 function renderResults(results, rec, mode) {
   const modeLabel = mode === "cheapest" ? "הכי זול" : "הכי משתלם";
   const basketCount = basket.length;
@@ -1167,12 +1283,20 @@ function renderResults(results, rec, mode) {
 
         <div class="premium-store-card__actions">
           <button class="btn ghost premium-details-btn" type="button">פרטים</button>
-          <a class="btn primary premium-cta" href="${website}" ${website === "#" ? "aria-disabled=\"true\"" : "target=\"_blank\" rel=\"noopener noreferrer\""}>${ctaText}</a>
+          <button class="btn primary premium-cta" type="button" ${website === "#" ? "disabled" : ""}>
+            ${ctaText}
+          </button>
         </div>
       `;
       storeCards.appendChild(card);
+
+      card.querySelector(".premium-cta")?.addEventListener("click", async (event) => {
+        event.stopPropagation();
+        await openStoreWithPrivacyConsent(r.storeName, website);
+      });
+
       card.addEventListener("click", (event) => {
-        if (event.target.closest("a")) return;
+        if (event.target.closest(".premium-cta")) return;
 
         renderSummaryCard(r, false);
 
@@ -1657,11 +1781,11 @@ async function loadProductsFromDb() {
     }
 
     if (Array.isArray(data.products) && data.products.length > 0) {
-      PRODUCTS = data.products;
+      PRODUCTS = enrichProductsWithApproxUnits(data.products);
     }
   } catch (error) {
     console.warn("Using fallback products:", error.message);
-    PRODUCTS = FALLBACK_PRODUCTS;
+    PRODUCTS = enrichProductsWithApproxUnits(FALLBACK_PRODUCTS);
   }
 }
 
