@@ -289,7 +289,11 @@ function openAppModal(options = {}) {
       validate = null
     } = options;
 
-    modalIcon.textContent = icon;
+    if (String(icon).includes("<")) {
+      modalIcon.innerHTML = icon;
+    } else {
+      modalIcon.textContent = icon;
+    }
     modalTitle.textContent = title;
     modalText.textContent = text;
     modalConfirmBtn.textContent = confirmText;
@@ -588,7 +592,7 @@ async function clearBasket() {
 
   const approved = await openAppModal({
     type: "danger",
-    icon: "🧺",
+    icon: `<img src="./css/saved-basket-icon.svg" alt="סל" class="modal-icon-img">`,
     title: "ניקוי הסל",
     text: "הפעולה תמחק את כל המוצרים מהסל הנוכחי. ניתן יהיה לבנות סל חדש לאחר מכן.",
     confirmText: "נקה סל",
@@ -1701,7 +1705,7 @@ async function saveCurrentBasket() {
   if (!basket.length) {
     await openAppModal({
       type: "danger",
-      icon: "🧺",
+      icon: `<img src="./css/saved-basket-icon.svg" alt="סל" class="modal-icon-img">`,
       title: "שמירת סל",
       text: "לא ניתן לשמור סל ריק. הוסף לפחות מוצר אחד לסל ואז נסה שוב.",
       confirmText: "הבנתי",

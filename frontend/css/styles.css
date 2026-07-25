@@ -3828,3 +3828,10 @@ body.is-results-screen {
   display: block;
   margin: 0 auto 8px;
 }
+
+.modal-icon-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  display: block;
+}
