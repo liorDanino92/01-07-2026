@@ -125,8 +125,6 @@ const aiSuggestBtn = el("aiSuggestBtn");
 const aiStatus = el("aiStatus");
 const aiSuggestionsList = el("aiSuggestionsList");
 const aiAddSelectedBtn = el("aiAddSelectedBtn");
-const aiQuery = null;
-const aiSuggestions = null;
 
 const basketTable = el("basketTable");
 const basketTbody = basketTable.querySelector("tbody");
@@ -151,10 +149,6 @@ const resultsSummary = el("resultsSummary");
 const storeCards = el("storeCards");
 
 // === סלים שמורים ===
-const saveBasketBtn = el("saveBasketBtn");
-const loadBasketBtn = el("loadBasketBtn");
-const clearSavedBtn = el("clearSavedBtn");
-const savedBackBtn = el("savedBackBtn");
 const savedStatus = el("savedStatus");
 
 // === הרשמה/התחברות ===
@@ -767,10 +761,8 @@ async function requestAiBasketSuggestions() {
     renderServerAiSuggestions(suggestions);
     stopAiLoadingState("מצאנו לך הצעה לסל. בחר מוצרים מהרשימה והוסף לסל.");
   } catch (error) {
-    const message = error instanceof TypeError
-      ? "לא ניתן להתחבר לעוזר הסל כרגע. ודא שהשרת פעיל."
-      : error?.message || "לא ניתן להתחבר לעוזר הסל כרגע. ודא שהשרת פעיל.";
-    stopAiLoadingState(message);
+    console.error(error);
+    stopAiLoadingState("האפשרות לא זמינה כרגע");
   } finally {
     if (aiSuggestBtn) aiSuggestBtn.disabled = false;
   }
@@ -810,107 +802,6 @@ aiAddSelectedBtn?.addEventListener("click", () => {
   renderBasket();
   renderProductOptions();
   if (aiStatus) aiStatus.textContent = "המוצרים נוספו לסל.";
-});
-
-
-// =================================================
-// עוזר הסל החכם — גרסה מקומית בלי API חיצוני
-// =================================================
-const AI_BASKET_IDEAS = [
-  {
-    keys: ["סלט", "ישראלי", "ירקות", "קליל", "בריא"],
-    title: "סל לסלט ישראלי",
-    ids: ["tomato", "cucumber", "onion", "pepper", "lettuce", "lemon"]
-  },
-  {
-    keys: ["פירות", "ילדים", "מתוק", "נשנוש"],
-    title: "פירות לילדים",
-    ids: ["apple", "banana", "strawberry", "peach", "loquat"]
-  },
-  {
-    keys: ["שבוע", "בסיסי", "זול", "בית", "חסכוני"],
-    title: "סל בסיסי לשבוע",
-    ids: ["tomato", "cucumber", "potato", "onion", "carrot", "apple", "banana"]
-  },
-  {
-    keys: ["מרק", "חורף", "בישול", "חם"],
-    title: "סל למרק ירקות",
-    ids: ["potato", "carrot", "onion", "zucchini", "pumpkin", "sweet_potato"]
-  },
-  {
-    keys: ["ירק", "עשבי", "תיבול", "עלים"],
-    title: "ירוקים ותיבול",
-    ids: ["parsley", "cilantro", "dill", "mint", "lettuce", "lemon"]
-  }
-];
-
-function getAiSuggestion(promptText) {
-  const text = (promptText || "").trim().toLowerCase();
-  if (!text) return AI_BASKET_IDEAS[0];
-
-  let best = AI_BASKET_IDEAS[0];
-  let bestScore = -1;
-  for (const idea of AI_BASKET_IDEAS) {
-    const score = idea.keys.reduce((sum, key) => sum + (text.includes(key) ? 1 : 0), 0);
-    if (score > bestScore) {
-      best = idea;
-      bestScore = score;
-    }
-  }
-  return best;
-}
-
-function renderAiSuggestions(promptText) {
-  if (!aiSuggestions) return;
-  const idea = getAiSuggestion(promptText);
-  const products = idea.ids.map(findProduct).filter(Boolean);
-
-  aiSuggestions.innerHTML = `
-    <div class="ai-suggestions__title">${idea.title}</div>
-    <div class="ai-products">
-      ${products.map(p => `
-        <button class="ai-product" type="button" data-ai-add="${p.id}">
-          <span>${p.name}</span>
-          <small>${p.unit}</small>
-          <b>+</b>
-        </button>
-      `).join("")}
-    </div>
-    <button class="btn primary btn--block ai-add-all" type="button" data-ai-add-all="${idea.ids.join(",")}">הוסף את כל ההצעה לסל</button>
-  `;
-
-  if (aiStatus) aiStatus.textContent = "אפשר להוסיף מוצר בודד או את כל ההצעה.";
-}
-
-aiSuggestBtn?.addEventListener("click", () => renderAiSuggestions(aiQuery?.value || ""));
-aiQuery?.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    renderAiSuggestions(aiQuery.value);
-  }
-});
-
-document.querySelectorAll(".ai-chip").forEach(btn => {
-  btn.addEventListener("click", () => {
-    if (aiQuery) aiQuery.value = btn.dataset.aiPrompt || "";
-    renderAiSuggestions(aiQuery?.value || "");
-  });
-});
-
-aiSuggestions?.addEventListener("click", (e) => {
-  const single = e.target.closest("[data-ai-add]");
-  const all = e.target.closest("[data-ai-add-all]");
-
-  if (single) {
-    addToBasket(single.dataset.aiAdd, 1);
-    if (aiStatus) aiStatus.textContent = "המוצר נוסף לסל.";
-  }
-
-  if (all) {
-    const ids = (all.dataset.aiAddAll || "").split(",").filter(Boolean);
-    ids.forEach(id => addToBasket(id, 1));
-    if (aiStatus) aiStatus.textContent = "כל המוצרים שהוצעו נוספו לסל.";
-  }
 });
 
 // =================================================
@@ -1809,7 +1700,6 @@ async function deleteSavedBasket(basketId) {
 }
 
 aboutBackBtn?.addEventListener("click", () => showScreen(screenBasket));
-savedBackBtn?.addEventListener("click", () => showScreen(screenBasket));
 saveCurrentBasketBtn?.addEventListener("click", saveCurrentBasket);
 saveBasketFromBuilderBtn?.addEventListener("click", saveCurrentBasket);
 

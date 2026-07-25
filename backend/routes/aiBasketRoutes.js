@@ -28,8 +28,8 @@ router.post("/ai-basket-suggestions", async (req, res) => {
   } catch (error) {
     console.error("AI basket suggestions error:", error.message);
 
-    return res.status(500).json({
-      error: "לא הצלחתי להציע סל כרגע. נסה שוב בעוד רגע."
+    return res.status(503).json({
+      error: "האפשרות לא זמינה כרגע"
     });
   }
 });
