@@ -31,7 +31,7 @@
   --shadow: 0 2px 6px rgba(20, 40, 25, .06), 0 8px 24px rgba(20, 40, 25, .06);
   --shadow-lg: 0 4px 14px rgba(20, 40, 25, .10), 0 18px 40px rgba(20, 40, 25, .10);
 
-  --container: 1280px;
+  --container: 1180px;
 }
 
 * {
@@ -85,6 +85,8 @@ body {
   align-items: center;
   gap: 24px;
   height: 68px;
+  max-width: 1180px;
+  margin: 0 auto;
 }
 
 .brand {
@@ -3364,7 +3366,9 @@ body.is-results-screen {
 .business-screen {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 22px;
+  max-width: 1180px;
+  margin: 28px auto 0;
 }
 
 .business-hero-card {
@@ -3372,7 +3376,7 @@ body.is-results-screen {
   grid-template-columns: minmax(0, 1.4fr) minmax(280px, .8fr);
   gap: 16px;
   align-items: stretch;
-  padding: 20px;
+  padding: 18px;
   border-radius: 20px;
   border: 1px solid rgba(47, 156, 74, .18);
   background:
@@ -3751,4 +3755,76 @@ body.is-results-screen {
 
 .password-toggle:hover {
   background: var(--green-50);
+}
+
+/* ===== AI loading state ===== */
+
+.ai-status--loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--green-700);
+  font-weight: 800;
+}
+
+.ai-loading-text {
+  animation: aiLoadingFade .35s ease;
+}
+
+.ai-loading-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.ai-loading-dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: .35;
+  animation: aiDotBounce 1s infinite ease-in-out;
+}
+
+.ai-loading-dots span:nth-child(2) {
+  animation-delay: .15s;
+}
+
+.ai-loading-dots span:nth-child(3) {
+  animation-delay: .3s;
+}
+
+@keyframes aiDotBounce {
+
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: .35;
+  }
+
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@keyframes aiLoadingFade {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.empty__image--small {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 8px;
 }

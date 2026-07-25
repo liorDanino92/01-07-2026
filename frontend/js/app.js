@@ -681,6 +681,50 @@ function renderServerAiSuggestions(suggestions) {
   }).join("");
 }
 
+let aiLoadingMessageTimer = null;
+
+const AI_LOADING_MESSAGES = [
+  "🧺 בונים לך סל חכם",
+
+];
+
+function startAiLoadingState() {
+  if (!aiStatus) return;
+
+  let index = 0;
+
+  aiStatus.classList.add("ai-status--loading");
+  aiStatus.innerHTML = `
+    <span class="ai-loading-text">${AI_LOADING_MESSAGES[index]}</span>
+    <span class="ai-loading-dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  `;
+
+  aiLoadingMessageTimer = setInterval(() => {
+    index = (index + 1) % AI_LOADING_MESSAGES.length;
+
+    const textEl = aiStatus.querySelector(".ai-loading-text");
+    if (textEl) {
+      textEl.textContent = AI_LOADING_MESSAGES[index];
+    }
+  }, 1600);
+}
+
+function stopAiLoadingState(message = "") {
+  if (aiLoadingMessageTimer) {
+    clearInterval(aiLoadingMessageTimer);
+    aiLoadingMessageTimer = null;
+  }
+
+  if (!aiStatus) return;
+
+  aiStatus.classList.remove("ai-status--loading");
+  aiStatus.textContent = message;
+}
+
 async function requestAiBasketSuggestions() {
   const promptText = (aiPromptInput?.value || "").trim();
 
@@ -690,7 +734,7 @@ async function requestAiBasketSuggestions() {
   }
 
   if (aiSuggestBtn) aiSuggestBtn.disabled = true;
-  if (aiStatus) aiStatus.textContent = "מחפש מוצרים מתאימים...";
+  startAiLoadingState();
   if (aiSuggestionsList) aiSuggestionsList.innerHTML = "";
 
   try {
@@ -712,17 +756,17 @@ async function requestAiBasketSuggestions() {
     const suggestions = Array.isArray(data.suggestions) ? data.suggestions : [];
 
     if (suggestions.length === 0) {
-      if (aiStatus) aiStatus.textContent = "לא נמצאו מוצרים מתאימים מתוך הרשימה.";
+      stopAiLoadingState("לא נמצאו מוצרים מתאימים מתוך הרשימה.");
       return;
     }
 
     renderServerAiSuggestions(suggestions);
-    if (aiStatus) aiStatus.textContent = "בחר מוצרים מהרשימה והוסף לסל.";
+    stopAiLoadingState("מצאנו לך הצעה לסל. בחר מוצרים מהרשימה והוסף לסל.");
   } catch (error) {
     const message = error instanceof TypeError
       ? "לא ניתן להתחבר לעוזר הסל כרגע. ודא שהשרת פעיל."
       : error?.message || "לא ניתן להתחבר לעוזר הסל כרגע. ודא שהשרת פעיל.";
-    if (aiStatus) aiStatus.textContent = message;
+    stopAiLoadingState(message);
   } finally {
     if (aiSuggestBtn) aiSuggestBtn.disabled = false;
   }
@@ -1588,7 +1632,7 @@ function renderSavedBaskets(savedBaskets) {
   if (!savedBaskets.length) {
     savedBasketsList.innerHTML = `
       <div class="empty">
-        <div class="empty__icon">🧺</div>
+        <img src="./css/saved-basket-icon.svg" alt="סל שמור" class="empty__image empty__image--small" />
         <p>עדיין לא שמרת סלים.</p>
         <small class="muted">בנה סל, לחץ על “שמור סל”, ותוכל לחזור אליו בכל זמן.</small>
       </div>
