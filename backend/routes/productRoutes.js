@@ -4,8 +4,6 @@ const supabase = require("../config/supabaseClient");
 const router = express.Router();
 
 router.get("/products", async (req, res) => {
-  console.log("GET /api/products was called");
-
   try {
     const { data, error } = await supabase
       .from("products")

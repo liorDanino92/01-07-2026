@@ -61,13 +61,6 @@ const STORES = [
   }
 ];
 
-const QUALITY_WEIGHT = {
-  "פרימיום": 3,
-  "מובחר": 2,
-  "מוזל": 1
-};
-
 module.exports = {
-  STORES,
-  QUALITY_WEIGHT
+  STORES
 };
