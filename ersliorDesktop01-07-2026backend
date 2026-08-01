@@ -1,0 +1,170 @@
+warning: in the working copy of 'frontend/js/app.js', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/frontend/index.html b/frontend/index.html[m
+[1mindex 9f2fdd6..e551d38 100644[m
+[1m--- a/frontend/index.html[m
+[1m+++ b/frontend/index.html[m
+[36m@@ -106,30 +106,6 @@[m
+               <div id="quickProductsList" class="quick-products"></div>[m
+             </div>[m
+           </div>[m
+[31m-[m
+[31m-          <div class="card card--pad ai-card hidden" aria-labelledby="aiHelperTitle">[m
+[31m-            <div class="ai-card__head">[m
+[31m-              <div>[m
+[31m-                <span class="ai-card__eyebrow">עוזר הסל החכם</span>[m
+[31m-                <h3 id="aiHelperTitle" class="card__title">רוצה שאציע לך סל?</h3>[m
+[31m-              </div>[m
+[31m-              <span class="ai-card__spark">✨</span>[m
+[31m-            </div>[m
+[31m-            <p class="muted ai-card__text">כתוב רעיון כמו “סל לסלט”, “פירות לילדים” או “סל זול לשבוע”, ואני אציע מוצרים[m
+[31m-              מתוך הרשימה שלך.</p>[m
+[31m-            <div class="ai-card__inputRow">[m
+[31m-              <input id="legacyAiQuery" type="text" placeholder="למשל: אני רוצה סל לסלט" />[m
+[31m-              <button id="legacyAiSuggestBtn" class="btn primary" type="button">הצע מוצרים</button>[m
+[31m-            </div>[m
+[31m-            <div class="ai-card__chips" aria-label="רעיונות מהירים">[m
+[31m-              <button class="ai-chip" type="button" data-ai-prompt="סל לסלט ישראלי">סלט ישראלי</button>[m
+[31m-              <button class="ai-chip" type="button" data-ai-prompt="פירות לילדים">פירות לילדים</button>[m
+[31m-              <button class="ai-chip" type="button" data-ai-prompt="סל ירקות בסיסי לשבוע">ירקות לשבוע</button>[m
+[31m-              <button class="ai-chip" type="button" data-ai-prompt="סל למרק ירקות">מרק ירקות</button>[m
+[31m-            </div>[m
+[31m-            <div id="legacyAiSuggestions" class="ai-suggestions" aria-live="polite"></div>[m
+[31m-            <small id="legacyAiStatus" class="hint"></small>[m
+[31m-          </div>[m
+         </div>[m
+ [m
+         <!-- Right: basket -->[m
+[36m@@ -726,7 +702,7 @@[m
+     <section id="screen-auth" class="screen hidden">[m
+       <div class="screen__header">[m
+         <h2 id="authTitle">הרשמה</h2>[m
+[31m-        <p class="muted">הפרטים נשמרים מקומית בדפדפן בלבד.</p>[m
+[32m+[m[32m        <p class="muted">צור חשבון כדי לשמור סלים ולחזור אליהם בהמשך.</p>[m
+       </div>[m
+ [m
+       <div class="card card--pad card--narrow">[m
+[1mdiff --git a/frontend/js/app.js b/frontend/js/app.js[m
+[1mindex 63b8ca9..8d2ffab 100644[m
+[1m--- a/frontend/js/app.js[m
+[1m+++ b/frontend/js/app.js[m
+[36m@@ -125,8 +125,6 @@[m [mconst aiSuggestBtn = el("aiSuggestBtn");[m
+ const aiStatus = el("aiStatus");[m
+ const aiSuggestionsList = el("aiSuggestionsList");[m
+ const aiAddSelectedBtn = el("aiAddSelectedBtn");[m
+[31m-const aiQuery = null;[m
+[31m-const aiSuggestions = null;[m
+ [m
+ const basketTable = el("basketTable");[m
+ const basketTbody = basketTable.querySelector("tbody");[m
+[36m@@ -151,10 +149,6 @@[m [mconst resultsSummary = el("resultsSummary");[m
+ const storeCards = el("storeCards");[m
+ [m
+ // === סלים שמורים ===[m
+[31m-const saveBasketBtn = el("saveBasketBtn");[m
+[31m-const loadBasketBtn = el("loadBasketBtn");[m
+[31m-const clearSavedBtn = el("clearSavedBtn");[m
+[31m-const savedBackBtn = el("savedBackBtn");[m
+ const savedStatus = el("savedStatus");[m
+ [m
+ // === הרשמה/התחברות ===[m
+[36m@@ -812,107 +806,6 @@[m [maiAddSelectedBtn?.addEventListener("click", () => {[m
+   if (aiStatus) aiStatus.textContent = "המוצרים נוספו לסל.";[m
+ });[m
+ [m
+[31m-[m
+[31m-// =================================================[m
+[31m-// עוזר הסל החכם — גרסה מקומית בלי API חיצוני[m
+[31m-// =================================================[m
+[31m-const AI_BASKET_IDEAS = [[m
+[31m-  {[m
+[31m-    keys: ["סלט", "ישראלי", "ירקות", "קליל", "בריא"],[m
+[31m-    title: "סל לסלט ישראלי",[m
+[31m-    ids: ["tomato", "cucumber", "onion", "pepper", "lettuce", "lemon"][m
+[31m-  },[m
+[31m-  {[m
+[31m-    keys: ["פירות", "ילדים", "מתוק", "נשנוש"],[m
+[31m-    title: "פירות לילדים",[m
+[31m-    ids: ["apple", "banana", "strawberry", "peach", "loquat"][m
+[31m-  },[m
+[31m-  {[m
+[31m-    keys: ["שבוע", "בסיסי", "זול", "בית", "חסכוני"],[m
+[31m-    title: "סל בסיסי לשבוע",[m
+[31m-    ids: ["tomato", "cucumber", "potato", "onion", "carrot", "apple", "banana"][m
+[31m-  },[m
+[31m-  {[m
+[31m-    keys: ["מרק", "חורף", "בישול", "חם"],[m
+[31m-    title: "סל למרק ירקות",[m
+[31m-    ids: ["potato", "carrot", "onion", "zucchini", "pumpkin", "sweet_potato"][m
+[31m-  },[m
+[31m-  {[m
+[31m-    keys: ["ירק", "עשבי", "תיבול", "עלים"],[m
+[31m-    title: "ירוקים ותיבול",[m
+[31m-    ids: ["parsley", "cilantro", "dill", "mint", "lettuce", "lemon"][m
+[31m-  }[m
+[31m-];[m
+[31m-[m
+[31m-function getAiSuggestion(promptText) {[m
+[31m-  const text = (promptText || "").trim().toLowerCase();[m
+[31m-  if (!text) return AI_BASKET_IDEAS[0];[m
+[31m-[m
+[31m-  let best = AI_BASKET_IDEAS[0];[m
+[31m-  let bestScore = -1;[m
+[31m-  for (const idea of AI_BASKET_IDEAS) {[m
+[31m-    const score = idea.keys.reduce((sum, key) => sum + (text.includes(key) ? 1 : 0), 0);[m
+[31m-    if (score > bestScore) {[m
+[31m-      best = idea;[m
+[31m-      bestScore = score;[m
+[31m-    }[m
+[31m-  }[m
+[31m-  return best;[m
+[31m-}[m
+[31m-[m
+[31m-function renderAiSuggestions(promptText) {[m
+[31m-  if (!aiSuggestions) return;[m
+[31m-  const idea = getAiSuggestion(promptText);[m
+[31m-  const products = idea.ids.map(findProduct).filter(Boolean);[m
+[31m-[m
+[31m-  aiSuggestions.innerHTML = `[m
+[31m-    <div class="ai-suggestions__title">${idea.title}</div>[m
+[31m-    <div class="ai-products">[m
+[31m-      ${products.map(p => `[m
+[31m-        <button class="ai-product" type="button" data-ai-add="${p.id}">[m
+[31m-          <span>${p.name}</span>[m
+[31m-          <small>${p.unit}</small>[m
+[31m-          <b>+</b>[m
+[31m-        </button>[m
+[31m-      `).join("")}[m
+[31m-    </div>[m
+[31m-    <button class="btn primary btn--block ai-add-all" type="button" data-ai-add-all="${idea.ids.join(",")}">הוסף את כל ההצעה לסל</button>[m
+[31m-  `;[m
+[31m-[m
+[31m-  if (aiStatus) aiStatus.textContent = "אפשר להוסיף מוצר בודד או את כל ההצעה.";[m
+[31m-}[m
+[31m-[m
+[31m-aiSuggestBtn?.addEventListener("click", () => renderAiSuggestions(aiQuery?.value || ""));[m
+[31m-aiQuery?.addEventListener("keydown", (e) => {[m
+[31m-  if (e.key === "Enter") {[m
+[31m-    e.preventDefault();[m
+[31m-    renderAiSuggestions(aiQuery.value);[m
+[31m-  }[m
+[31m-});[m
+[31m-[m
+[31m-document.querySelectorAll(".ai-chip").forEach(btn => {[m
+[31m-  btn.addEventListener("click", () => {[m
+[31m-    if (aiQuery) aiQuery.value = btn.dataset.aiPrompt || "";[m
+[31m-    renderAiSuggestions(aiQuery?.value || "");[m
+[31m-  });[m
+[31m-});[m
+[31m-[m
+[31m-aiSuggestions?.addEventListener("click", (e) => {[m
+[31m-  const single = e.target.closest("[data-ai-add]");[m
+[31m-  const all = e.target.closest("[data-ai-add-all]");[m
+[31m-[m
+[31m-  if (single) {[m
+[31m-    addToBasket(single.dataset.aiAdd, 1);[m
+[31m-    if (aiStatus) aiStatus.textContent = "המוצר נוסף לסל.";[m
+[31m-  }[m
+[31m-[m
+[31m-  if (all) {[m
+[31m-    const ids = (all.dataset.aiAddAll || "").split(",").filter(Boolean);[m
+[31m-    ids.forEach(id => addToBasket(id, 1
