@@ -81,26 +81,34 @@
               </div>
             </div>
 
-            <div class="ai-helper-callout">
-              <span>לא בטוח מה להוסיף לסל?</span>
-              <small>פתח את עוזר הסל החכם ותאר מה אתה צריך - מתכון, סל לאירוח, צורך תזונתי או כל דבר אחר</small>
-            </div>
-            <button id="aiToggleBtn" class="btn ai-toggle-btn" type="button">✨ עוזר הסל החכם</button>
+            <div class="ai-helper-box">
+              <div class="ai-helper-box">
+                <div class="ai-helper-box__text">
+                  <strong>לא בטוח מה להוסיף לסל?</strong>
+                  <span>פתח את עוזר הסל החכם ותאר מה אתה צריך — מתכון, סל לאירוח, צורך תזונתי או כל דבר אחר.</span>
+                </div>
 
-            <div id="aiPanel" class="ai-panel hidden" aria-live="polite">
-              <div class="ai-panel__header">
-                <h4>בנה סל לפי בקשה</h4>
-                <p>כתוב בקשה חופשית והעוזר שלנו יחפש עבורך פריטים רלוונטים.</p>
+                <button id="aiToggleBtn" class="btn ai-toggle-btn" type="button">
+                  <img src="./assets/icons/smart_basket.png" alt="" class="ai-toggle-btn__icon" aria-hidden="true">
+                  <span>עוזר הסל החכם</span>
+                </button>
               </div>
 
-              <div class="ai-panel__form">
-                <input id="aiPromptInput" type="text" placeholder="למשל: סלט יווני, קוסקוס, פלטת פירות" />
-                <button id="aiSuggestBtn" class="btn primary" type="button">הצע מוצרים</button>
-              </div>
+              <div id="aiPanel" class="ai-panel hidden" aria-live="polite">
+                <div class="ai-panel__header">
+                  <h4>בנה סל לפי בקשה</h4>
+                  <p>כתוב בקשה חופשית והעוזר שלנו יחפש עבורך פריטים רלוונטיים.</p>
+                </div>
 
-              <div id="aiStatus" class="ai-status"></div>
-              <div id="aiSuggestionsList" class="ai-suggestions"></div>
-              <button id="aiAddSelectedBtn" class="btn primary btn--block" type="button">הוסף נבחרים לסל</button>
+                <div class="ai-panel__form">
+                  <input id="aiPromptInput" type="text" placeholder="למשל: סלט יווני, קוסקוס, פלטת פירות" />
+                  <button id="aiSuggestBtn" class="btn primary" type="button">הצע מוצרים</button>
+                </div>
+
+                <div id="aiStatus" class="ai-status"></div>
+                <div id="aiSuggestionsList" class="ai-suggestions"></div>
+                <button id="aiAddSelectedBtn" class="btn primary btn--block" type="button">הוסף נבחרים לסל</button>
+              </div>
             </div>
 
             <div class="quick-add">

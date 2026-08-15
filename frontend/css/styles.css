@@ -3122,7 +3122,8 @@ body.is-results-screen {
   font-size: 42px;
   line-height: 1.1;
   font-weight: 800;
-  color: #0f542d;;
+  color: #0f542d;
+  ;
   white-space: nowrap;
 
 }
@@ -3148,11 +3149,9 @@ body.is-results-screen {
   margin-top: 30px;
 
   background:
-    linear-gradient(
-      135deg,
+    linear-gradient(135deg,
       #f4faef 0%,
-      #fbfdf8 100%
-    );
+      #fbfdf8 100%);
 
   border-radius: 28px;
   border: 1px solid #edf2e9;
@@ -3197,9 +3196,7 @@ body.is-results-screen {
   object-fit: contain;
 
   filter:
-    drop-shadow(
-      0 18px 18px rgba(45, 76, 39, 0.15)
-    );
+    drop-shadow(0 18px 18px rgba(45, 76, 39, 0.15));
 }
 
 .gtk-featured-info {
@@ -3237,6 +3234,7 @@ body.is-results-screen {
 
   color: #3f4c43;
 }
+
 /* ==================================================
    כרטיסי הפירות העונתיים - ענבים ונקטרינה
    ================================================== */
@@ -3290,11 +3288,9 @@ body.is-results-screen {
 
 .gtk-grapes {
   background:
-    linear-gradient(
-      135deg,
+    linear-gradient(135deg,
       #f1edf8 0%,
-      #faf8fd 100%
-    );
+      #faf8fd 100%);
 }
 
 
@@ -3302,11 +3298,9 @@ body.is-results-screen {
 
 .gtk-nectarine {
   background:
-    linear-gradient(
-      135deg,
+    linear-gradient(135deg,
       #fff0e5 0%,
-      #fff9f5 100%
-    );
+      #fff9f5 100%);
 }
 
 
@@ -3353,9 +3347,7 @@ body.is-results-screen {
 
   /* צל עדין מתחת לפרי */
   filter:
-    drop-shadow(
-      0 14px 16px rgba(48, 65, 48, 0.12)
-    );
+    drop-shadow(0 14px 16px rgba(48, 65, 48, 0.12));
 }
 
 
@@ -3393,6 +3385,7 @@ body.is-results-screen {
     height: 135px;
   }
 }
+
 /* ==================================================
    כרטיסי המידע התחתונים - טיפ השבוע והידעת
    ================================================== */
@@ -3476,6 +3469,7 @@ body.is-results-screen {
 
   color: #5f665f;
 }
+
 /* ============================================================
    Business screen - עמוד לבעלי עסקים
    ============================================================ */
@@ -3951,4 +3945,121 @@ body.is-results-screen {
   height: 42px;
   object-fit: contain;
   display: block;
+}
+
+.ai-helper-callout {
+  margin-top: 14px;
+  margin-bottom: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(47, 156, 74, .18);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(240, 250, 242, .95), rgba(255, 255, 255, .95));
+}
+
+.ai-helper-callout span {
+  display: block;
+  font-weight: 900;
+  color: var(--green-800);
+}
+
+.ai-helper-callout small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.ai-toggle-btn {
+  width: 100%;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.ai-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ai-toggle-btn__icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  display: inline-block;
+  flex: 0 0 22px;
+}
+
+.ai-helper-box {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ai-helper-box .ai-helper-callout {
+  margin: 0;
+}
+
+.ai-helper-box {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  padding: 16px;
+  border: 1px solid rgba(47, 156, 74, 0.22);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(240, 250, 242, 0.96), rgba(255, 255, 255, 0.98));
+  box-shadow: 0 12px 28px rgba(22, 101, 52, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ai-helper-box__text {
+  text-align: center;
+}
+
+.ai-helper-box__text strong {
+  display: block;
+  color: var(--green-900);
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.ai-helper-box__text span {
+  display: block;
+  color: var(--green-800);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.ai-helper-box .ai-toggle-btn {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 999px;
+  border: 1px solid rgba(47, 156, 74, 0.24);
+  background: #ffffff;
+  color: var(--green-900);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 900;
+  box-shadow: none;
+}
+
+.ai-helper-box .ai-toggle-btn:hover {
+  background: var(--green-50);
+  border-color: rgba(47, 156, 74, 0.38);
+}
+
+.ai-toggle-btn__icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  display: inline-block;
+  flex: 0 0 26px;
 }
