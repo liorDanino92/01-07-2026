@@ -771,9 +771,6 @@ async function requestAiBasketSuggestions() {
 aiToggleBtn?.addEventListener("click", () => {
   if (!aiPanel) return;
   aiPanel.classList.toggle("hidden");
-  if (!aiPanel.classList.contains("hidden")) {
-    aiPromptInput?.focus();
-  }
 });
 
 aiSuggestBtn?.addEventListener("click", requestAiBasketSuggestions);

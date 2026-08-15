@@ -80,16 +80,21 @@
                 </select>
               </div>
             </div>
-            <button id="aiToggleBtn" class="btn ai-toggle-btn" type="button">✨ הצע לי סל</button>
+
+            <div class="ai-helper-callout">
+              <span>לא בטוח מה להוסיף לסל?</span>
+              <small>פתח את עוזר הסל החכם ותאר מה אתה צריך - מתכון, סל לאירוח, צורך תזונתי או כל דבר אחר</small>
+            </div>
+            <button id="aiToggleBtn" class="btn ai-toggle-btn" type="button">✨ עוזר הסל החכם</button>
 
             <div id="aiPanel" class="ai-panel hidden" aria-live="polite">
               <div class="ai-panel__header">
-                <h4>עוזר סל חכם</h4>
-                <p>כתוב מה אתה רוצה להכין, והמערכת תציע מוצרים מתוך הרשימה באתר.</p>
+                <h4>בנה סל לפי בקשה</h4>
+                <p>כתוב בקשה חופשית והעוזר שלנו יחפש עבורך פריטים רלוונטים.</p>
               </div>
 
               <div class="ai-panel__form">
-                <input id="aiPromptInput" type="text" placeholder="למשל: סלט יווני, סלט פירות, פלטת פירות" />
+                <input id="aiPromptInput" type="text" placeholder="למשל: סלט יווני, קוסקוס, פלטת פירות" />
                 <button id="aiSuggestBtn" class="btn primary" type="button">הצע מוצרים</button>
               </div>
 
@@ -197,7 +202,7 @@
               <input type="radio" name="mode" value="cheapest" checked />
               <div>
                 <b>הכי זול</b>
-                <span class="muted">המחיר הכולל הנמוך ביותר</span>
+                <span class="muted">המחיר הכי זול מבין הסלים המתאימים</span>
               </div>
             </label>
             <label class="radio-card">
@@ -264,162 +269,147 @@
 
 
     <!-- ===== מסך טוב לדעת ===== -->
-   <section id="screen-good-to-know" class="screen hidden">
-    
-  <div class="gtk-page">
+    <section id="screen-good-to-know" class="screen hidden">
 
-    <div class="gtk-header">
-    
-      <h1>טוב לדעת</h1>
+      <div class="gtk-page">
 
-      <p>
-        דברים קטנים שעוזרים לקנות חכם יותר
-      </p>
-    </div>
+        <div class="gtk-header">
 
-
-    <div class="gtk-featured">
-
-      <div class="gtk-featured-text">
-
-        <span class="gtk-small-title">
-          מה טרי השבוע? 🍃
-        </span>
-
-        <h2>
-          פירות בעונה<br>
-          ששווה להכניס לסל
-        </h2>
-
-      </div>
-
-
-      <div class="gtk-featured-image">
-        <img
-          src="./images/watermelon.png"
-          alt="אבטיח"
-        >
-      </div>
-
-
-      <div class="gtk-featured-info">
-
-        <span class="gtk-badge">
-          בחירת השבוע
-        </span>
-
-        <h3>אבטיח</h3>
-
-        <p>
-          קר, מתוק ומרענן.<br>
-          אחד הדברים הכי פשוטים<br>
-          שכיף להחזיק במקרר<br>
-          בימים חמים.
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <div class="gtk-fruit-grid">
-
-      <article class="gtk-fruit-card gtk-grapes">
-
-        <div class="gtk-fruit-copy">
-          <h3>ענבים</h3>
+          <h1>טוב לדעת</h1>
 
           <p>
-            נשנוש קטן<br>
-            ומתוק שמתאים<br>
-            לכל שעה.
+            דברים קטנים שעוזרים לקנות חכם יותר
           </p>
         </div>
 
-        <img
-          src="./images/grapes.png"
-          alt="ענבים"
-        >
 
-      </article>
+        <div class="gtk-featured">
+
+          <div class="gtk-featured-text">
+
+            <span class="gtk-small-title">
+              מה טרי השבוע? 🍃
+            </span>
+
+            <h2>
+              פירות בעונה<br>
+              ששווה להכניס לסל
+            </h2>
+
+          </div>
 
 
-      <article class="gtk-fruit-card gtk-nectarine">
+          <div class="gtk-featured-image">
+            <img src="./images/watermelon.png" alt="אבטיח">
+          </div>
 
-        <div class="gtk-fruit-copy">
-          <h3>נקטרינה</h3>
 
-          <p>
-            אחד מפירות<br>
-            הקיץ הכיפיים —<br>
-            עסיסית, מתוקה<br>
-            ונוחה לאכילה.
-          </p>
+          <div class="gtk-featured-info">
+
+            <span class="gtk-badge">
+              בחירת השבוע
+            </span>
+
+            <h3>אבטיח</h3>
+
+            <p>
+              קר, מתוק ומרענן.<br>
+              אחד הדברים הכי פשוטים<br>
+              שכיף להחזיק במקרר<br>
+              בימים חמים.
+            </p>
+
+          </div>
+
         </div>
 
-        <img
-          src="./images/nectarine.png"
-          alt="נקטרינה"
-        >
 
-      </article>
+        <div class="gtk-fruit-grid">
 
-    </div>
+          <article class="gtk-fruit-card gtk-grapes">
+
+            <div class="gtk-fruit-copy">
+              <h3>ענבים</h3>
+
+              <p>
+                נשנוש קטן<br>
+                ומתוק שמתאים<br>
+                לכל שעה.
+              </p>
+            </div>
+
+            <img src="./images/grapes.png" alt="ענבים">
+
+          </article>
 
 
-    <div class="gtk-more-title">
-      <span></span>
-      <h2>עוד כמה דברים שכדאי לדעת 🍃</h2>
-      <span></span>
-    </div>
+          <article class="gtk-fruit-card gtk-nectarine">
+
+            <div class="gtk-fruit-copy">
+              <h3>נקטרינה</h3>
+
+              <p>
+                אחד מפירות<br>
+                הקיץ הכיפיים —<br>
+                עסיסית, מתוקה<br>
+                ונוחה לאכילה.
+              </p>
+            </div>
+
+            <img src="./images/nectarine.png" alt="נקטרינה">
+
+          </article>
+
+        </div>
 
 
-    <div class="gtk-info-card">
+        <div class="gtk-more-title">
+          <span></span>
+          <h2>עוד כמה דברים שכדאי לדעת 🍃</h2>
+          <span></span>
+        </div>
 
-      <div class="gtk-info-icon">
-        <img
-          src="./images/tip-lightbulb-sal.png"
-          alt="טיפ השבוע"
-        >
+
+        <div class="gtk-info-card">
+
+          <div class="gtk-info-icon">
+            <img src="./images/tip-lightbulb-sal.png" alt="טיפ השבוע">
+          </div>
+
+          <div class="gtk-info-text">
+            <h3>טיפ השבוע</h3>
+
+            <p>
+              לא תמיד החנות עם מחיר המוצר הנמוך ביותר
+              תיתן את הסל הזול ביותר.
+              כדאי לקחת בחשבון גם משלוח,
+              מינימום הזמנה וזמינות.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="gtk-info-card">
+
+          <div class="gtk-info-icon">
+            <img src="./images/did-you-know-list.png" alt="הידעת">
+          </div>
+
+          <div class="gtk-info-text">
+            <h3>הידעת?</h3>
+
+            <p>
+              כשמשווים סל שלם ולא מוצר בודד,
+              אפשר לקבל תמונה הרבה יותר אמיתית
+              של מחיר הקנייה.
+            </p>
+          </div>
+
+        </div>
+
       </div>
-
-      <div class="gtk-info-text">
-        <h3>טיפ השבוע</h3>
-
-        <p>
-          לא תמיד החנות עם מחיר המוצר הנמוך ביותר
-          תיתן את הסל הזול ביותר.
-          כדאי לקחת בחשבון גם משלוח,
-          מינימום הזמנה וזמינות.
-        </p>
-      </div>
-
-    </div>
-
-
-    <div class="gtk-info-card">
-
-      <div class="gtk-info-icon">
-        <img
-          src="./images/did-you-know-list.png"
-          alt="הידעת"
-        >
-      </div>
-
-      <div class="gtk-info-text">
-        <h3>הידעת?</h3>
-
-        <p>
-          כשמשווים סל שלם ולא מוצר בודד,
-          אפשר לקבל תמונה הרבה יותר אמיתית
-          של מחיר הקנייה.
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-  </section>
+    </section>
 
     <!-- ===== Screen Business ===== -->
     <section id="screen-business" class="screen hidden business-screen">
