@@ -82,6 +82,17 @@
             </div>
 
             <div class="ai-helper-box">
+              <div class="ai-helper-badge-row">
+                <span class="ai-helper-badge">AI</span>
+
+                <button class="ai-tooltip-trigger" type="button" aria-label="מה עושה עוזר הסל החכם?">
+                  ?
+                  <span class="ai-tooltip">
+                    כתוב מה אתה צריך, והעוזר יציע מוצרים מתאימים מתוך הרשימה. אתה בוחר מה להוסיף לסל.
+                  </span>
+                </button>
+              </div>
+
               <div class="ai-helper-box__text">
                 <strong>לא בטוח מה להוסיף לסל?</strong>
                 <span>פתח את עוזר הסל החכם ותאר מה אתה צריך — מתכון, סל לאירוח, צורך תזונתי או כל דבר אחר.</span>
@@ -91,6 +102,12 @@
                 <img src="./assets/icons/smart_basket.png" alt="" class="ai-toggle-btn__icon" aria-hidden="true">
                 <span>עוזר הסל החכם</span>
               </button>
+
+              <div class="ai-helper-examples" aria-label="דוגמאות מהירות לעוזר הסל">
+                <button class="ai-helper-chip" type="button" data-ai-example="סלט יווני">סלט יווני</button>
+                <button class="ai-helper-chip" type="button" data-ai-example="פלטת פירות לאירוח">פלטת פירות</button>
+                <button class="ai-helper-chip" type="button" data-ai-example="ירקות למרק">ירקות למרק</button>
+              </div>
 
               <div id="aiPanel" class="ai-panel hidden" aria-live="polite">
                 <div class="ai-panel__header">

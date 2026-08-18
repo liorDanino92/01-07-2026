@@ -775,6 +775,20 @@ aiToggleBtn?.addEventListener("click", () => {
 
 aiSuggestBtn?.addEventListener("click", requestAiBasketSuggestions);
 
+document.querySelectorAll(".ai-helper-chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    if (!aiPromptInput || !aiPanel) return;
+
+    aiPromptInput.value = chip.dataset.aiExample || "";
+
+    if (aiPanel.classList.contains("hidden")) {
+      aiPanel.classList.remove("hidden");
+    }
+
+    aiPromptInput.focus();
+  });
+});
+
 aiPromptInput?.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
