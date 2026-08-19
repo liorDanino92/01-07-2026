@@ -1155,25 +1155,14 @@ body.is-results-screen .container--wide {
 
 .premium-price strong {
   font-size: 34px;
-  color: #2f9c4a;
+  color: #8f2f3f;
   font-weight: 900;
   line-height: 1;
 }
 
-.premium-store-card:not(.premium-store-card--winner) .premium-price strong {
-  color: #ee754c;
-}
-
-.premium-store-card:nth-child(3) .premium-price strong {
-  color: #f08b1d;
-}
-
-.premium-store-card:nth-child(4) .premium-price strong {
-  color: #a76fbd;
-}
-
-.premium-store-card:nth-child(5) .premium-price strong {
-  color: #e3a914;
+/* החנות המומלצת נשארת ירוקה */
+.premium-store-card--winner .premium-price strong {
+  color: #2f9c4a;
 }
 
 .coverage-line {
@@ -4174,4 +4163,9 @@ body.is-results-screen {
   border-color: var(--green-500);
   background: var(--green-50);
   transform: translateY(-1px);
+}
+
+.prefs-hint {
+  color: var(--text);
+  font-weight: 600;
 }

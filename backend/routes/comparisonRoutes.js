@@ -6,6 +6,7 @@ const { getStoresFromDb } = require("../services/storeService");
 
 const {
   calculateComparisons,
+  rankComparisons,
   pickRecommendation
 } = require("../services/comparisonService");
 
@@ -37,7 +38,16 @@ router.post("/compare", async (req, res) => {
       );
     }
 
-    const results = calculateComparisons(basket, filteredStores);
+    const rawResults = calculateComparisons(
+      basket,
+      filteredStores,
+      stores
+    );
+
+    const results = rankComparisons(
+      rawResults,
+      mode
+    );
 
     if (results.length === 0) {
       return res.json({

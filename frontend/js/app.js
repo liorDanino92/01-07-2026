@@ -849,7 +849,24 @@ calcBtn.addEventListener("click", async () => {
 
   if (!city) {
     cityInput?.classList.add("input-error");
-    cityError?.classList.remove("hidden");
+
+    if (cityError) {
+      cityError.textContent = "יש לבחור עיר או יישוב.";
+      cityError.classList.remove("hidden");
+    }
+
+    cityInput?.focus();
+    return;
+  }
+
+  if (!CITIES.includes(city)) {
+    cityInput?.classList.add("input-error");
+
+    if (cityError) {
+      cityError.textContent = "לא מצאנו את העיר שהקלדת. בחר עיר מתוך הרשימה המוצעת.";
+      cityError.classList.remove("hidden");
+    }
+
     cityInput?.focus();
     return;
   }
@@ -911,11 +928,7 @@ document.getElementById("cityInput")?.addEventListener("input", (e) => {
 // =================================================
 // תוצאות: כרטיס סיכום + רשת כרטיסי חנות + טבלה מפורטת
 // =================================================
-function qualityBadge(q) {
-  if (q === "פרימיום") return `<span class="badge ok">פרימיום</span>`;
-  if (q === "מובחר") return `<span class="badge warn">מובחר</span>`;
-  return `<span class="badge bad">מוזל</span>`;
-}
+
 
 function productNameById(productId) {
   return findProduct(productId)?.name ?? productId;
@@ -1065,18 +1078,13 @@ async function openStoreWithPrivacyConsent(storeName, website) {
 }
 
 function renderResults(results, rec, mode) {
-  const modeLabel = mode === "cheapest" ? "הכי זול" : "הכי משתלם";
+  const modeLabel =
+    mode === "cheapest"
+      ? "האפשרות החסכונית ביותר"
+      : "הסל המלא ביותר";
   const basketCount = basket.length;
 
-  const sortedResults = results.slice().sort((a, b) => {
-    if (rec.type === "store") {
-      if (a.storeId === rec.storeId) return -1;
-      if (b.storeId === rec.storeId) return 1;
-    }
-    const pa = a.totalWithDelivery ?? a.subtotal ?? Number.MAX_SAFE_INTEGER;
-    const pb = b.totalWithDelivery ?? b.subtotal ?? Number.MAX_SAFE_INTEGER;
-    return pa - pb;
-  });
+  const sortedResults = results.slice();
 
   const validPrices = sortedResults
     .map(r => r.totalWithDelivery ?? r.subtotal)
@@ -1087,6 +1095,14 @@ function renderResults(results, rec, mode) {
 
   function renderSummaryCard(storeResult, isRecommended = false) {
     const selectedPrice = storeResult?.totalWithDelivery ?? storeResult?.subtotal;
+    const hasMissingItems =
+      (storeResult?.missingCount ?? storeResult?.missing?.length ?? 0) > 0;
+
+    const hasMissingEstimate =
+      hasMissingItems &&
+      storeResult?.missingEstimateAvailable &&
+      typeof storeResult?.estimatedMissingCost === "number" &&
+      typeof storeResult?.estimatedBasketTotal === "number";
     const saving = avgPrice && typeof selectedPrice === "number"
       ? Math.max(0, avgPrice - selectedPrice)
       : 0;
@@ -1146,14 +1162,44 @@ function renderResults(results, rec, mode) {
         `;
     });
 
-    resultsSummary.querySelector('[data-summary-action="missing"]')?.addEventListener("click", () => {
-      detailsPanel.classList.toggle("hidden");
-      detailsPanel.innerHTML = `
-          <div class="summary-details-title">מוצרים חסרים בחנות ${escapeHtml(storeResult.storeName)}</div>
-          <div class="summary-details-subtitle">אלו פריטים מהסל שלא נמצאו בחנות שנבחרה</div>
-          ${renderCoverageItemsList(storeResult, "missing")}
-        `;
-    });
+    resultsSummary
+      .querySelector('[data-summary-action="missing"]')
+      ?.addEventListener("click", () => {
+
+        detailsPanel.classList.toggle("hidden");
+
+        const estimateHtml = hasMissingItems
+          ? hasMissingEstimate
+            ? `
+          <div class="summary-details-subtitle">
+            הערכת עלות המוצרים החסרים:
+            <b>${formatPrice(storeResult.estimatedMissingCost)}</b>
+            · עלות משוערת לסל לאחר השלמת החוסרים:
+            <b>${formatPrice(storeResult.estimatedBasketTotal)}</b>
+          </div>
+        `
+            : `
+          <div class="summary-details-subtitle">
+            לא ניתן לחשב הערכת מחיר אמינה לכל המוצרים החסרים.
+          </div>
+        `
+          : "";
+
+        detailsPanel.innerHTML = `
+      <div class="summary-details-title">
+        מוצרים חסרים בחנות ${escapeHtml(storeResult.storeName)}
+      </div>
+
+      ${estimateHtml}
+
+      ${hasMissingItems
+            ? renderCoverageItemsList(storeResult, "missing")
+            : `<div class="summary-details-empty">
+               כל מוצרי הסל קיימים בחנות.
+             </div>`
+          }
+    `;
+      });
   }
 
   // ----- כרטיס סיכום עליון -----
@@ -1207,7 +1253,6 @@ function renderResults(results, rec, mode) {
         <div class="premium-store-card__main">
           <div class="premium-store-card__head">
             <h3 class="store-card__name">${r.storeName}</h3>
-            ${qualityBadge(r.quality)}
           </div>
 
           <div class="premium-price">
@@ -1278,7 +1323,6 @@ function renderResults(results, rec, mode) {
       : `<span class="badge bad">לא עומד</span>`;
     tr.innerHTML = `
       <td><b>${r.storeName}</b>${isRec ? ' <span class="chip">מומלץ</span>' : ""}</td>
-      <td>${qualityBadge(r.quality)}</td>
       <td>${r.coverageFound}/${r.coverageTotal || basketCount}</td>
       <td>${formatPrice(r.subtotal)}</td>
       <td>${formatPrice(r.deliveryFee)}</td>
