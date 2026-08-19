@@ -682,7 +682,7 @@ function renderServerAiSuggestions(suggestions) {
 let aiLoadingMessageTimer = null;
 
 const AI_LOADING_MESSAGES = [
-  "🧺 בונים לך סל חכם",
+  "בונים לך סל חכם...",
 
 ];
 
